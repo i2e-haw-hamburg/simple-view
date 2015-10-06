@@ -25,11 +25,15 @@ namespace Assets.Scripts
             {
                 var dataLoader = LoaderFactory.CreateFileLoader(defaultPath);
                 var type = CADTypeUtils.FromFileExtension(defaultPath);
-                var model = _loader.Load(type, dataLoader);
-
-
-                var gameObject = Builder.Create("Model", "defaultMat");
-                Builder.UpdateMesh(gameObject, model);
+                var cad_model = _loader.Load(type, dataLoader);
+                var models = cad_model.Models;
+                var baseObject = Builder.Create("Model");
+                foreach (var model in models)
+                {
+                    var gameObject = Builder.Create(model.Name, "defaultMat");
+                    Builder.UpdateMesh(ref gameObject, model);
+                    gameObject.transform.parent = baseObject.transform;
+                }
                 dataLoader.Close();
             }    
         }

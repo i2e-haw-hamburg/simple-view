@@ -9,30 +9,36 @@ namespace Assets.Scripts.Model
 {
     static class Builder
     {
-        public static GameObject Create(string name, string materialName)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="materialName"></param>
+        /// <returns></returns>
+        public static GameObject Create(string name, string materialName=null)
         {
             var modelObject = new GameObject(name);
-
-
-            modelObject.transform.GetComponent<MeshFilter>();
-
-            if (!modelObject.transform.GetComponent<MeshFilter>() || !modelObject.transform.GetComponent<MeshRenderer>())
+            if (materialName != null)
             {
-                modelObject.transform.gameObject.AddComponent<MeshFilter>();
-                modelObject.transform.gameObject.AddComponent<MeshRenderer>();
+                modelObject.transform.GetComponent<MeshFilter>();
+                if (!modelObject.transform.GetComponent<MeshFilter>() || !modelObject.transform.GetComponent<MeshRenderer>())
+                {
+                    modelObject.transform.gameObject.AddComponent<MeshFilter>();
+                    modelObject.transform.gameObject.AddComponent<MeshRenderer>();
+                }
+                var material = Resources.Load<Material>(string.Format("{0}", materialName));
+                modelObject.transform.GetComponent<MeshRenderer>().material = material;
+                var mesh = new Mesh();
+                modelObject.transform.GetComponent<MeshFilter>().mesh = mesh;
             }
-
-            var material = Resources.Load<Material>(string.Format("{0}", materialName));
-            Debug.Log(material);
-            modelObject.transform.GetComponent<MeshRenderer>().material = material;
-
-            var mesh = new Mesh();
-            modelObject.transform.GetComponent<MeshFilter>().mesh = mesh;
-
             return modelObject;
         }
-
-        public static void UpdateMesh(GameObject gameObject, IModel model)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="model"></param>
+        public static void UpdateMesh(ref GameObject gameObject, IModel model)
         {
             var mesh = gameObject.transform.GetComponent<MeshFilter>().mesh;
 
