@@ -1,62 +1,37 @@
-﻿using System.Linq;
-using STPConverter;
-using STPLoader;
-using STPLoader.Interface;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Model;
+using BasicLoader;
+using CADLoader;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class FileLoader : MonoBehaviour
     {
-        private string _path = @"C:\Users\squad\git\stp-loader\STPLoader\Example\bin\Debug\Gehaeuserumpf.stp";
-        private ILoader _loader;
-        private IParser _parser = ParserFactory.Create();
-        private IConverter _converter = ConverterFactory.Create();
+        [SerializeField]
+        private string defaultPath = @"C:\Users\squad\Downloads\CAD_Daten_Lagertraeger\Gehaeuserumpf.stl";
+        private CADLoader.CADLoader _loader;
+
+        void Start()
+        {
+            _loader = new CADLoader.CADLoader(new List<IParser> {STPLoader.ParserFactory.Create(), STLLoader.ParserFactory.Create()});
+        }
     
         void OnGUI()
         {
-            _path = GUILayout.TextField(_path);
+            defaultPath = GUILayout.TextField(defaultPath);
 
             if (GUILayout.Button("Load File"))
             {
-                _loader = LoaderFactory.CreateFileLoader(_path);
-                var model = _parser.Parse(_loader.Load());
-                var convertedModel = _converter.Convert(model);
+                var dataLoader = LoaderFactory.CreateFileLoader(defaultPath);
+                var type = CADTypeUtils.FromFileExtension(defaultPath);
+                var model = _loader.Load(type, dataLoader);
 
 
-                var modelObject = new GameObject("Model");
-
-                var mesh = new Mesh();
-
-                modelObject.transform.GetComponent<MeshFilter>();
-
-                if (!modelObject.transform.GetComponent<MeshFilter>() || !modelObject.transform.GetComponent<MeshRenderer>())
-                {
-                    modelObject.transform.gameObject.AddComponent<MeshFilter>();
-                    modelObject.transform.gameObject.AddComponent<MeshRenderer>();
-                }
-
-                modelObject.transform.GetComponent<MeshFilter>().mesh = mesh;
-
-
-                var vertices = convertedModel.Points.Select<AForge.Math.Vector3,Vector3>(ToUnity).ToArray();
-                var triangles = convertedModel.Triangles.ToArray();
-
-                mesh.vertices = vertices;
-                mesh.triangles = triangles;
-
-                mesh.RecalculateNormals();
-                mesh.Optimize();
-
-                modelObject.GetComponent<MeshFilter>().mesh = mesh;
+                var gameObject = Builder.Create("Model", "defaultMat");
+                Builder.UpdateMesh(gameObject, model);
+                dataLoader.Close();
             }    
-        }
-
-    
-
-        private static Vector3 ToUnity(AForge.Math.Vector3 v3)
-        {
-            return new Vector3(v3.X, v3.Z, v3.Y);
         }
     }
 }
