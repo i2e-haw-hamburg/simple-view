@@ -10,32 +10,22 @@ namespace Assets.Scripts
     {
         [SerializeField]
         private string defaultPath = @"C:\Users\squad\Downloads\CAD_Daten_Lagertraeger\Gehaeuserumpf.stl";
-        private CADLoader.CADLoader _loader;
-
-        void Start()
+        
+        public void OnClick()
         {
-            _loader = new CADLoader.CADLoader(new List<IParser> {STPLoader.ParserFactory.Create(), STLLoader.ParserFactory.Create()});
-        }
-    
-        void OnGUI()
-        {
-            defaultPath = GUILayout.TextField(defaultPath);
-
-            if (GUILayout.Button("Load File"))
+            var loader = new CADLoader.CADLoader(new List<IParser> { STPLoader.ParserFactory.Create(), STLLoader.ParserFactory.Create() });
+            var dataLoader = LoaderFactory.CreateFileLoader(defaultPath);
+            var type = CADTypeUtils.FromFileExtension(defaultPath);
+            var cad_model = loader.Load(type, dataLoader);
+            var models = cad_model.Models;
+            var baseObject = Builder.Create("Model");
+            foreach (var model in models)
             {
-                var dataLoader = LoaderFactory.CreateFileLoader(defaultPath);
-                var type = CADTypeUtils.FromFileExtension(defaultPath);
-                var cad_model = _loader.Load(type, dataLoader);
-                var models = cad_model.Models;
-                var baseObject = Builder.Create("Model");
-                foreach (var model in models)
-                {
-                    var gameObject = Builder.Create(model.Name, "defaultMat");
-                    Builder.UpdateMesh(ref gameObject, model);
-                    gameObject.transform.parent = baseObject.transform;
-                }
-                dataLoader.Close();
-            }    
+                var gameObject = Builder.Create(model.Name, "defaultMat");
+                Builder.UpdateMesh(ref gameObject, model);
+                gameObject.transform.parent = baseObject.transform;
+            }
+            dataLoader.Close();
         }
     }
 }
