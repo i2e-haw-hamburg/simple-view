@@ -25,17 +25,17 @@ namespace Assets.Scripts
 
         public void LoadFile()
         {
-            var loader = new CADLoader.CADLoader(new List<IParser> { STPLoader.ParserFactory.Create(), STLLoader.ParserFactory.Create() });
+            var loader = new CADLoader.CADLoader(new List<IParser> { STPLoader.ParserFactory.Create(), STLLoader.ParserFactory.Create(), ThreeDXMLParser.ParserFactory.Create() });
             var dataLoader = LoaderFactory.CreateFileLoader(_text.text);
             var type = CADTypeUtils.FromFileExtension(_text.text);
-            var cad_model = loader.Load(type, dataLoader);
-            var models = cad_model.Models;
+            var cadModel = loader.Load(type, dataLoader);
+            var models = cadModel.Models;
             var baseObject = Builder.Create("Model");
             foreach (var model in models)
             {
-                var gameObject = Builder.Create(model.Name, "defaultMat");
-                Builder.UpdateMesh(ref gameObject, model);
-                gameObject.transform.parent = baseObject.transform;
+                var go = Builder.Create(model.Name, "defaultMat");
+                Builder.UpdateMesh(ref go, model);
+                go.transform.parent = baseObject.transform;
             }
             dataLoader.Close();
         }
