@@ -14,6 +14,9 @@ namespace Assets.Scripts
 
         [SerializeField]
         private GameObject cfgFileNameField;
+        
+        [SerializeField]
+        private GameObject cfgModelManager;
 
         private InputField _text;
 
@@ -25,12 +28,13 @@ namespace Assets.Scripts
 
         public void LoadFile()
         {
-            var loader = new CADLoader.CADLoader(new List<IParser> { STPLoader.ParserFactory.Create(), STLLoader.ParserFactory.Create(), ThreeDXMLParser.ParserFactory.Create() });
+            var loader = new CADLoader.CADLoader(new List<IParser> { STPLoader.ParserFactory.Create(), STLLoader.ParserFactory.Create(), ThreeDXMLLoader.ParserFactory.Create() });
             var dataLoader = LoaderFactory.CreateFileLoader(_text.text);
             var type = CADTypeUtils.FromFileExtension(_text.text);
             var cadModel = loader.Load(type, dataLoader);
             var models = cadModel.Models;
             var baseObject = Builder.Create("Model");
+            baseObject.transform.parent = cfgModelManager.transform;
             foreach (var model in models)
             {
                 var go = Builder.Create(model.Name, "defaultMat");
