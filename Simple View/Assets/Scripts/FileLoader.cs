@@ -32,13 +32,13 @@ namespace Assets.Scripts
             var dataLoader = LoaderFactory.CreateFileLoader(_text.text);
             var type = CADTypeUtils.FromFileExtension(_text.text);
             var cadModel = loader.Load(type, dataLoader);
-            var models = cadModel.Models;
+            var parts = cadModel.Parts;
             var baseObject = Builder.Create("Model");
             baseObject.transform.parent = cfgModelManager.transform;
-            foreach (var model in models)
+            foreach (var part in parts)
             {
-                var go = Builder.Create(model.Name, "defaultMat");
-                Builder.UpdateMesh(ref go, model);
+                var go = Builder.Create(part.Name, "defaultMat");
+                Builder.UpdateMesh(ref go, part);
                 go.transform.parent = baseObject.transform;
             }
             dataLoader.Close();
