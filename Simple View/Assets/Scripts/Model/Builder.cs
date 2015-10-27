@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BasicLoader;
+using BasicLoader.Interface;
 using CADLoader;
 using UnityEngine;
 
@@ -37,13 +39,13 @@ namespace Assets.Scripts.Model
         /// 
         /// </summary>
         /// <param name="gameObject"></param>
-        /// <param name="model"></param>
-        public static void UpdateMesh(ref GameObject gameObject, IModel model)
+        /// <param name="part"></param>
+        public static void UpdateMesh(ref GameObject gameObject, IPart part)
         {
             var mesh = gameObject.transform.GetComponent<MeshFilter>().mesh;
 
-            mesh.vertices = model.Vertices.Select<AForge.Math.Vector3, Vector3>(ToUnity).ToArray();
-            mesh.triangles = model.Triangles.ToArray();
+            mesh.vertices = part.Vertices.Select<AForge.Math.Vector3, Vector3>(ToUnity).ToArray();
+            mesh.triangles = part.Triangles.ToArray();
 
             mesh.RecalculateNormals();
             mesh.Optimize();

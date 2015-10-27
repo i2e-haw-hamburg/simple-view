@@ -3,6 +3,7 @@ using Assets.Scripts.Model;
 using BasicLoader;
 using CADLoader;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
@@ -10,32 +11,38 @@ namespace Assets.Scripts
     {
         [SerializeField]
         private string defaultPath = @"C:\Users\squad\Downloads\CAD_Daten_Lagertraeger\Gehaeuserumpf.stl";
-        private CADLoader.CADLoader _loader;
 
-        void Start()
+        [SerializeField]
+        private GameObject cfgFileNameField;
+        
+        [SerializeField]
+        private GameObject cfgModelManager;
+
+        private InputField _text;
+
+        public void Start()
         {
-            _loader = new CADLoader.CADLoader(new List<IParser> {STPLoader.ParserFactory.Create(), STLLoader.ParserFactory.Create()});
+            _text = cfgFileNameField.GetComponent<InputField>();
+            _text.text = defaultPath;
         }
-    
-        void OnGUI()
-        {
-            defaultPath = GUILayout.TextField(defaultPath);
 
-            if (GUILayout.Button("Load File"))
+        public void LoadFile()
+        {
+            var loader = new CADLoader.CADLoader(new List<IParser> { STPLoader.ParserFactory.Create(), STLLoader.ParserFactory.Create(), ThreeDXMLLoader.ParserFactory.Create() });
+            var dataLoader = LoaderFactory.CreateFileLoader(_text.text);
+            var type = CADTypeUtils.FromFileExtension(_text.text);
+            var cadModel = loader.Load(type, dataLoader);
+            var parts = cadModel.Parts;
+            var baseObject = Builder.Create("Model");
+            baseObject.transform.parent = cfgModelManager.transform;
+            foreach (var part in parts)
             {
-                var dataLoader = LoaderFactory.CreateFileLoader(defaultPath);
-                var type = CADTypeUtils.FromFileExtension(defaultPath);
-                var cad_model = _loader.Load(type, dataLoader);
-                var models = cad_model.Models;
-                var baseObject = Builder.Create("Model");
-                foreach (var model in models)
-                {
-                    var gameObject = Builder.Create(model.Name, "defaultMat");
-                    Builder.UpdateMesh(ref gameObject, model);
-                    gameObject.transform.parent = baseObject.transform;
-                }
-                dataLoader.Close();
-            }    
+                var go = Builder.Create(part.Name, "defaultMat");
+                Builder.UpdateMesh(ref go, part);
+                go.transform.parent = baseObject.transform;
+            }
+            dataLoader.Close();
         }
+        
     }
 }
