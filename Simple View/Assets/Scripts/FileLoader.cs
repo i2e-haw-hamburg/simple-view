@@ -39,8 +39,13 @@ namespace Assets.Scripts
             {
                 var go = Builder.Create(part.Name, "defaultMat");
                 Builder.UpdateMesh(ref go, part);
+                var meshCollider = go.AddComponent<MeshCollider>();
+                meshCollider.convex = true;
                 go.transform.parent = baseObject.transform;
             }
+
+            baseObject.AddComponent<Rigidbody>();
+            
             dataLoader.Close();
         }
         

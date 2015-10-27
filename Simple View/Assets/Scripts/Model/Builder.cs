@@ -55,7 +55,7 @@ namespace Assets.Scripts.Model
 
         private static Vector3 ToUnity(AForge.Math.Vector3 v3)
         {
-            return new Vector3(v3.X, v3.Z, v3.Y);
+            return new Vector3(v3.X / 1000, v3.Z / 1000, v3.Y / 1000);
         }
     }
 }
