@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: RegisterMobileDeviceMessage.proto
+// Generated from: i2enetworkmessagedefinitions/MobileDevice/RegisterMobileDeviceMessage.proto
 namespace NetworkMessages
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"RegisterMobileDeviceMessage")]

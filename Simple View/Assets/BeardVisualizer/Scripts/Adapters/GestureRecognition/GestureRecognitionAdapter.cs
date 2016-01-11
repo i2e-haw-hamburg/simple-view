@@ -47,9 +47,7 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
     private void Start()
     {
         this.users = new Dictionary<long, GestureInterfaceUser>();
-
-        NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                             .SubscribeToMessagesOfType<UserInitMessage>(this.OnUserInitMessage);
+        
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
                              .SubscribeToMessagesOfType<UserRemoveMessage>(this.OnUserRemoveMessage);
         
@@ -177,9 +175,9 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
     {
         if (!this.users.ContainsKey(message.userId))
         {
-            DefaultLogger.Instance.Error(
-                "Failed to update user with ID " + message.userId + ": There is no user registered with this ID.");
-            return;
+            DefaultLogger.Instance.Info(
+                "Create new user with ID " + message.userId + ": There is no user registered with this ID.");
+            CreateNewUser(message);
         }
         
         DefaultLogger.Instance.Debug("Got user update message with following contents:"
@@ -253,11 +251,8 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
         }
     }
 
-    private void OnUserInitMessage(
-        UserInitMessage message,
-        IPEndPoint remoteEndPoint,
-        IPEndPoint localEndPoint,
-        Guid transactionId)
+    private void CreateNewUser(
+        UserUpdateMessage message)
     {
         GameObject userGameobject;
 

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: SOARegisterService.proto
+// Generated from: i2enetworkmessagedefinitions/SOA/SOARegisterService.proto
 namespace NetworkMessages.SOA
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"SOARegisterService")]

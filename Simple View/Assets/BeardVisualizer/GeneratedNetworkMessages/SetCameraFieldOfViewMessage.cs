@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: SetCameraFieldOfViewMessage.proto
+// Generated from: i2enetworkmessagedefinitions/MobileDevice/SetCameraFieldOfViewMessage.proto
 namespace NetworkMessages
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"SetCameraFieldOfViewMessage")]

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: SetCameraResolutionMessage.proto
+// Generated from: i2enetworkmessagedefinitions/MobileDevice/SetCameraResolutionMessage.proto
 namespace NetworkMessages
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"SetCameraResolutionMessage")]

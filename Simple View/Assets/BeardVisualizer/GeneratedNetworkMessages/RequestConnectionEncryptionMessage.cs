@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: RequestConnectionEncryptionMessage.proto
+// Generated from: i2enetworkmessagedefinitions/RequestConnectionEncryptionMessage.proto
 namespace NetworkMessages
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"RequestConnectionEncryptionMessage")]

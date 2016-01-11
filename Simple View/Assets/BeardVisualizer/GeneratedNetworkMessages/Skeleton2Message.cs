@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: Skeleton2Message.proto
+// Generated from: i2enetworkmessagedefinitions/Trame/Skeleton2Message.proto
 namespace NetworkMessages.Trame
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Skeleton2Message")]

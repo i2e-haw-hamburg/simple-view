@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: RegisterForObjectTrackingMessages.proto
+// Generated from: i2enetworkmessagedefinitions/ObjectTracking/RegisterForObjectTrackingMessages.proto
 namespace NetworkMessages.ObjectTracking
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"RegisterForObjectTrackingMessages")]

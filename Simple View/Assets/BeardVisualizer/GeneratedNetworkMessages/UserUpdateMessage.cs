@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: UserUpdateMessage.proto
+// Generated from: i2enetworkmessagedefinitions/GestureInterface/UserUpdateMessage.proto
 namespace NetworkMessages
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"UserUpdateMessage")]
@@ -27,6 +27,13 @@ namespace NetworkMessages
     public global::System.Collections.Generic.List<int> bodyPartId
     {
       get { return _bodyPartId; }
+    }
+  
+    private readonly global::System.Collections.Generic.List<float> _bodyPartLength = new global::System.Collections.Generic.List<float>();
+    [global::ProtoBuf.ProtoMember(3, Name=@"bodyPartLength", DataFormat = global::ProtoBuf.DataFormat.FixedSize, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
+    public global::System.Collections.Generic.List<float> bodyPartLength
+    {
+      get { return _bodyPartLength; }
     }
   
     private readonly global::System.Collections.Generic.List<float> _bodyPartPositionX = new global::System.Collections.Generic.List<float>();
@@ -160,6 +167,13 @@ namespace NetworkMessages
     public global::System.Collections.Generic.List<float> bodyPartAngularAccelerationZ
     {
       get { return _bodyPartAngularAccelerationZ; }
+    }
+  
+    private readonly global::System.Collections.Generic.List<float> _bodyPartRadius = new global::System.Collections.Generic.List<float>();
+    [global::ProtoBuf.ProtoMember(23, Name=@"bodyPartRadius", DataFormat = global::ProtoBuf.DataFormat.FixedSize, Options = global::ProtoBuf.MemberSerializationOptions.Packed)]
+    public global::System.Collections.Generic.List<float> bodyPartRadius
+    {
+      get { return _bodyPartRadius; }
     }
   
     private global::ProtoBuf.IExtension extensionObject;

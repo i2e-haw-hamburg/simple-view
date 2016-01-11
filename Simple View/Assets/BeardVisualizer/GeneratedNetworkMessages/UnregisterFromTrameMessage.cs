@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: UnregisterFromTrameMessage.proto
+// Generated from: i2enetworkmessagedefinitions/Trame/UnregisterFromTrameMessage.proto
 namespace NetworkMessages.Trame
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"UnregisterFromTrameMessage")]

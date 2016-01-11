@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: PositionChanged.proto
+// Generated from: i2enetworkmessagedefinitions/ObjectTracking/PositionChanged.proto
 namespace NetworkMessages.ObjectTracking
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"PositionChanged")]

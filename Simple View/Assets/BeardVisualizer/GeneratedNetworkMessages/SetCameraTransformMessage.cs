@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: SetCameraTransformMessage.proto
+// Generated from: i2enetworkmessagedefinitions/MobileDevice/SetCameraTransformMessage.proto
 namespace NetworkMessages
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"SetCameraTransformMessage")]

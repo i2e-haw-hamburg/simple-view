@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: UserRemoveMessage.proto
+// Generated from: i2enetworkmessagedefinitions/GestureInterface/UserRemoveMessage.proto
 namespace NetworkMessages
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"UserRemoveMessage")]

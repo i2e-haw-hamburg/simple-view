@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: SOARequestServiceMetadata.proto
+// Generated from: i2enetworkmessagedefinitions/SOA/SOARequestServiceMetadata.proto
 namespace NetworkMessages.SOA
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"SOARequestServiceMetadata")]

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: ErrorOnProcessingMessage.proto
+// Generated from: i2enetworkmessagedefinitions/ErrorOnProcessingMessage.proto
 namespace NetworkMessages
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ErrorOnProcessingMessage")]

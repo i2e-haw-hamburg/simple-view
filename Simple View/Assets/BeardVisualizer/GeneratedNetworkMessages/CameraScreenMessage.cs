@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: CameraScreenMessage.proto
+// Generated from: i2enetworkmessagedefinitions/MobileDevice/CameraScreenMessage.proto
 namespace NetworkMessages
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"CameraScreenMessage")]

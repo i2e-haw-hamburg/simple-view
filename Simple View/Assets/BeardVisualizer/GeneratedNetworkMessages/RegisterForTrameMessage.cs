@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: RegisterForTrameMessage.proto
+// Generated from: i2enetworkmessagedefinitions/Trame/RegisterForTrameMessage.proto
 namespace NetworkMessages.Trame
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"RegisterForTrameMessage")]

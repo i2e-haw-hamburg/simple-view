@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: RotationChanged.proto
+// Generated from: i2enetworkmessagedefinitions/ObjectTracking/RotationChanged.proto
 namespace NetworkMessages.ObjectTracking
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"RotationChanged")]

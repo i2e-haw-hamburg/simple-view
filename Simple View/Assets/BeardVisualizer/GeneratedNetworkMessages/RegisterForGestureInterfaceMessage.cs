@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: RegisterForGestureInterfaceMessage.proto
+// Generated from: i2enetworkmessagedefinitions/GestureInterface/RegisterForGestureInterfaceMessage.proto
 namespace NetworkMessages
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"RegisterForGestureInterfaceMessage")]

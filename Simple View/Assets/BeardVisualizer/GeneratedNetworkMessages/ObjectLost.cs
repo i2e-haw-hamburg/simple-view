@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: ObjectLost.proto
+// Generated from: i2enetworkmessagedefinitions/ObjectTracking/ObjectLost.proto
 namespace NetworkMessages.ObjectTracking
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ObjectLost")]

@@ -4,6 +4,7 @@ using BasicLoader;
 using CADLoader;
 using UnityEngine;
 using UnityEngine.UI;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Assets.Scripts
 {
@@ -39,12 +40,13 @@ namespace Assets.Scripts
             {
                 var go = Builder.Create(part.Name, "defaultMat");
                 Builder.UpdateMesh(ref go, part);
-                var meshCollider = go.AddComponent<MeshCollider>();
-                meshCollider.convex = true;
+                //var meshCollider = go.AddComponent<MeshCollider>();
+                //meshCollider.convex = true;
                 go.transform.parent = baseObject.transform;
+                go.transform.localPosition = Builder.ToUnity(part.Position);
             }
 
-            baseObject.AddComponent<Rigidbody>();
+            //baseObject.AddComponent<Rigidbody>();
             
             dataLoader.Close();
         }

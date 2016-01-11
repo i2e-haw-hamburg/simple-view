@@ -53,7 +53,7 @@ namespace Assets.Scripts.Model
             gameObject.GetComponent<MeshFilter>().mesh = mesh;
         }
 
-        private static Vector3 ToUnity(AForge.Math.Vector3 v3)
+        public static Vector3 ToUnity(AForge.Math.Vector3 v3)
         {
             return new Vector3(v3.X / 1000, v3.Z / 1000, v3.Y / 1000);
         }

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: NetworkMessage.proto
+// Generated from: i2enetworkmessagedefinitions/NetworkMessage.proto
 namespace NetworkMessages
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"NetworkMessage")]

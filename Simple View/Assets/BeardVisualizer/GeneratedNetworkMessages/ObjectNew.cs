@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: ObjectNew.proto
+// Generated from: i2enetworkmessagedefinitions/ObjectTracking/ObjectNew.proto
 namespace NetworkMessages.ObjectTracking
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ObjectNew")]
