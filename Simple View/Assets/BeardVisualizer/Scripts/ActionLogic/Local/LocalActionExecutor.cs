@@ -4,7 +4,6 @@ namespace Assets.Scripts.ActionLogic.Local
 
     using System;
     using System.Diagnostics;
-
     using Debug = UnityEngine.Debug;
 
     #endregion

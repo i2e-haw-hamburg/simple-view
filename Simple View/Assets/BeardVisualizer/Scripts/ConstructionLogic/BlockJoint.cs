@@ -2,9 +2,7 @@
 
 using System;
 using System.Collections;
-
 using Holoville.HOTween;
-
 using UnityEngine;
 
 #endregion
@@ -50,10 +48,7 @@ namespace Assets.Scripts.ConstructionLogic
         /// </summary>
         public Quaternion JointConnectionConstraintRotation
         {
-            get
-            {
-                return Quaternion.LookRotation(-this.transform.forward, this.transform.up);
-            }
+            get { return Quaternion.LookRotation(-this.transform.forward, this.transform.up); }
         }
 
         /// <summary>
@@ -86,7 +81,7 @@ namespace Assets.Scripts.ConstructionLogic
             otherJoint.RotateJoint(this.JointConnectionConstraintRotation);
 
             otherJoint.OwningBlock.EntityPosition = this.EntityPosition
-                                                    - otherJoint.transform.forward * deltaToOwningBlock.magnitude;
+                                                    - otherJoint.transform.forward*deltaToOwningBlock.magnitude;
         }
 
         /// <summary>
@@ -112,15 +107,15 @@ namespace Assets.Scripts.ConstructionLogic
 
             yield return
                 this.StartCoroutine(
-                    otherJoint.RotateJointAnimated(this.JointConnectionConstraintRotation, animationTime / 2.0f));
+                    otherJoint.RotateJointAnimated(this.JointConnectionConstraintRotation, animationTime/2.0f));
 
             HOTween.To(
                 otherJoint.OwningBlock,
-                animationTime / 2.0f,
+                animationTime/2.0f,
                 new TweenParms().Prop(
                     "EntityPosition",
-                    this.EntityPosition - otherJoint.transform.forward * deltaToOwningBlock.magnitude)
-                                .Ease(EaseType.EaseOutCubic));
+                    this.EntityPosition - otherJoint.transform.forward*deltaToOwningBlock.magnitude)
+                    .Ease(EaseType.EaseOutCubic));
         }
 
         public void DetachBlockJoint(BlockJoint otherJoint)
@@ -136,8 +131,8 @@ namespace Assets.Scripts.ConstructionLogic
         {
             // Get the delta between the specified and our current rotation. Transform.RotateAround works with relative rotations only, so we can't just feed it an absolute value.
             var deltaRotation = Quaternion.FromToRotation(
-                this.EntityRotation * Vector3.forward,
-                rotation * Vector3.forward);
+                this.EntityRotation*Vector3.forward,
+                rotation*Vector3.forward);
 
             // Extract the angle and axis of the delta rotation.
             float angle;
@@ -156,8 +151,8 @@ namespace Assets.Scripts.ConstructionLogic
         {
             // Get the delta between the specified and our current rotation. Transform.RotateAround works with relative rotations only, so we can't just feed it an absolute value.
             var deltaRotation = Quaternion.FromToRotation(
-                this.EntityRotation * Vector3.forward,
-                rotation * Vector3.forward);
+                this.EntityRotation*Vector3.forward,
+                rotation*Vector3.forward);
 
             // Extract the angle and axis of the delta rotation.
             float angle;
@@ -165,11 +160,11 @@ namespace Assets.Scripts.ConstructionLogic
             deltaRotation.ToAngleAxis(out angle, out axis);
 
             float currentRotation = 0;
-            float rotationPerSecond = angle / animationTime;
+            float rotationPerSecond = angle/animationTime;
 
             while (currentRotation < Mathf.Abs(angle))
             {
-                var rotationThisFrame = rotationPerSecond * Time.deltaTime;
+                var rotationThisFrame = rotationPerSecond*Time.deltaTime;
 
                 // Make sure the rotation does not overshoot.
                 if (currentRotation + rotationThisFrame > Mathf.Abs(angle))
@@ -195,7 +190,7 @@ namespace Assets.Scripts.ConstructionLogic
 
         private Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion angle)
         {
-            return angle * (point - pivot) + pivot;
+            return angle*(point - pivot) + pivot;
         }
 
         #endregion

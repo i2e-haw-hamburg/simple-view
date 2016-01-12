@@ -156,6 +156,7 @@ namespace UnityTest
         {
             TryToCallTesting(Functions.OnTriggerStay);
         }
+
         public void OnCollisionEnter()
         {
             TryToCallTesting(Functions.OnCollisionEnter);

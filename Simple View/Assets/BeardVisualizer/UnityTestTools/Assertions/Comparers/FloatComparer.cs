@@ -32,6 +32,7 @@ namespace UnityTest
             }
             throw new Exception();
         }
+
         public override int GetDepthOfSearch()
         {
             return 3;

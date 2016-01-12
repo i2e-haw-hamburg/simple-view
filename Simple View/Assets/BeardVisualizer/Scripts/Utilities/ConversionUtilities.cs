@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public static class ConversionUtilities {
-
+public static class ConversionUtilities
+{
     public static Vector3 NetworkWorldCoordinatesToUnityCoordinates(Vector3 networkCoordinates)
     {
         return networkCoordinates;

@@ -6,7 +6,11 @@ namespace UnityTest
 {
     public class TransformComparer : ComparerBaseGeneric<Transform>
     {
-        public enum CompareType { Equals, NotEquals }
+        public enum CompareType
+        {
+            Equals,
+            NotEquals
+        }
 
         public CompareType compareType;
 

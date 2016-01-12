@@ -12,9 +12,7 @@ namespace Assets.Scripts.ConstructionLogic
     #region usages
 
     using System.Collections;
-
     using Holoville.HOTween;
-
     using UnityEngine;
 
     #endregion
@@ -63,7 +61,8 @@ namespace Assets.Scripts.ConstructionLogic
 
         private void Update()
         {
-            switch(JointOrientation) {
+            switch (JointOrientation)
+            {
                 case BlockJointOrientation.UP:
                     Debug.DrawLine(this.EntityPosition, this.EntityPosition + transform.forward, Color.red);
                     break;
@@ -74,7 +73,6 @@ namespace Assets.Scripts.ConstructionLogic
                     Debug.DrawLine(this.EntityPosition, this.EntityPosition + transform.forward, Color.yellow);
                     break;
             }
-            
         }
 
         #region Public Methods and Operators
@@ -91,23 +89,23 @@ namespace Assets.Scripts.ConstructionLogic
             var roundedEntityRot = otherJoint.OwningBlock.EntityRotation.eulerAngles;
             //roundedEntityRot.x = Mathf.Round(roundedEntityRot.x / 90.0f) * 90.0f;
             roundedEntityRot.x = 0.0f;
-            roundedEntityRot.y = Mathf.Round(roundedEntityRot.y / 90.0f) * 90.0f;
+            roundedEntityRot.y = Mathf.Round(roundedEntityRot.y/90.0f)*90.0f;
             //roundedEntityRot.z = Mathf.Round(roundedEntityRot.z / 90.0f) * 90.0f;
             roundedEntityRot.z = 0;
             var targetRot = Quaternion.Euler(roundedEntityRot);
 
             HOTween.To(
                 otherJoint.OwningBlock,
-                animationTime / 2.0f,
+                animationTime/2.0f,
                 new TweenParms().Prop("EntityRotation", targetRot).Ease(EaseType.EaseOutCubic));
 
             HOTween.To(
                 otherJoint.OwningBlock,
-                animationTime / 2.0f,
+                animationTime/2.0f,
                 new TweenParms().Prop(
                     "EntityPosition",
-                    this.OwningBlock.EntityPosition + (this.EntityPosition - this.OwningBlock.EntityPosition) * 2.0f)
-                                .Ease(EaseType.EaseOutCubic).OnComplete(this.OnPositionReached));
+                    this.OwningBlock.EntityPosition + (this.EntityPosition - this.OwningBlock.EntityPosition)*2.0f)
+                    .Ease(EaseType.EaseOutCubic).OnComplete(this.OnPositionReached));
         }
 
         #endregion
@@ -118,8 +116,10 @@ namespace Assets.Scripts.ConstructionLogic
             var allJoints = ConstructionEntityManager.Instance.RegisteredConstructionEntities.OfType<BlockJoint>();
 
             // TODO: Complexity of algorithm way too high!
-            foreach(BlockJoint jointOfOwningBlock in jointsOfOwningBlock) {
-                foreach(BlockJoint globalJoint in allJoints) {
+            foreach (BlockJoint jointOfOwningBlock in jointsOfOwningBlock)
+            {
+                foreach (BlockJoint globalJoint in allJoints)
+                {
                     if (jointOfOwningBlock == globalJoint)
                     {
                         continue;

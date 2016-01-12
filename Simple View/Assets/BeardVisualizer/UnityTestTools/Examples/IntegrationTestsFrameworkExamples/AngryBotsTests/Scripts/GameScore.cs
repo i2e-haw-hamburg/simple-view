@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class GameScore : MonoBehaviour
 {
-    static GameScore s_Instance;
+    private static GameScore s_Instance;
 
 
-    static GameScore Instance
+    private static GameScore Instance
     {
         get
         {
             if (s_Instance == null)
             {
-                s_Instance = (GameScore)FindObjectOfType(typeof(GameScore));
+                s_Instance = (GameScore) FindObjectOfType(typeof (GameScore));
             }
 
             return s_Instance;
@@ -30,9 +30,9 @@ public class GameScore : MonoBehaviour
     public string playerLayerName = "Player", enemyLayerName = "Enemies";
 
 
-    int m_Deaths;
-    readonly Dictionary<string, int> m_Kills = new Dictionary<string, int>();
-    float m_StartTime;
+    private int m_Deaths;
+    private readonly Dictionary<string, int> m_Kills = new Dictionary<string, int>();
+    private float m_StartTime;
 
 
     public static int Deaths
@@ -49,7 +49,7 @@ public class GameScore : MonoBehaviour
     }
 
 
-    #if !UNITY_FLASH
+#if !UNITY_FLASH
     public static ICollection<string> KillTypes
     {
         get
@@ -62,7 +62,7 @@ public class GameScore : MonoBehaviour
             return Instance.m_Kills.Keys;
         }
     }
-    #endif  // if !UNITY_FLASH
+#endif // if !UNITY_FLASH
 
 
     public static int GetKills(string type)
@@ -108,7 +108,9 @@ public class GameScore : MonoBehaviour
         }
         else if (deadObject.layer == enemyLayer)
         {
-            Instance.m_Kills[deadObject.name] = Instance.m_Kills.ContainsKey(deadObject.name) ? Instance.m_Kills[deadObject.name] + 1 : 1;
+            Instance.m_Kills[deadObject.name] = Instance.m_Kills.ContainsKey(deadObject.name)
+                ? Instance.m_Kills[deadObject.name] + 1
+                : 1;
         }
     }
 

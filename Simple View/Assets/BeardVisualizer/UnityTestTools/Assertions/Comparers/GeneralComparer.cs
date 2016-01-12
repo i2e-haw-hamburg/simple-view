@@ -6,7 +6,11 @@ namespace UnityTest
 {
     public class GeneralComparer : ComparerBase
     {
-        public enum CompareType { AEqualsB, ANotEqualsB }
+        public enum CompareType
+        {
+            AEqualsB,
+            ANotEqualsB
+        }
 
         public CompareType compareType;
 

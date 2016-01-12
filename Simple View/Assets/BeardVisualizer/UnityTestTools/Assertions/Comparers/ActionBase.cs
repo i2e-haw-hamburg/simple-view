@@ -14,15 +14,20 @@ namespace UnityTest
         private MemberResolver m_MemberResolver;
 
         public string thisPropertyPath = "";
+
         public virtual Type[] GetAccepatbleTypesForA()
         {
             return null;
         }
-        public virtual int GetDepthOfSearch() { return 2; }
+
+        public virtual int GetDepthOfSearch()
+        {
+            return 2;
+        }
 
         public virtual string[] GetExcludedFieldNames()
         {
-            return new string[] { };
+            return new string[] {};
         }
 
         public bool Compare()
@@ -36,29 +41,36 @@ namespace UnityTest
 
         protected abstract bool Compare(object objVal);
 
-        virtual protected bool UseCache { get { return false; } }
+        protected virtual bool UseCache
+        {
+            get { return false; }
+        }
 
-        public virtual Type GetParameterType() { return typeof(object); }
+        public virtual Type GetParameterType()
+        {
+            return typeof (object);
+        }
 
         public virtual string GetConfigurationDescription()
         {
             string result = "";
 #if !UNITY_METRO
-            foreach (var prop in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                     .Where(info => info.FieldType.IsSerializable))
+            foreach (
+                var prop in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                    .Where(info => info.FieldType.IsSerializable))
             {
                 var value = prop.GetValue(this);
                 if (value is double)
-                    value = ((double)value).ToString("0.########");
+                    value = ((double) value).ToString("0.########");
                 if (value is float)
-                    value = ((float)value).ToString("0.########");
+                    value = ((float) value).ToString("0.########");
                 result += value + " ";
             }
-#endif  // if !UNITY_METRO
+#endif // if !UNITY_METRO
             return result;
         }
 
-        IEnumerable<FieldInfo> GetFields(Type type)
+        private IEnumerable<FieldInfo> GetFields(Type type)
         {
 #if !UNITY_METRO
             return type.GetFields(BindingFlags.Public | BindingFlags.Instance);
@@ -95,7 +107,8 @@ namespace UnityTest
 
         public virtual string GetFailureMessage()
         {
-            return GetType().Name + " assertion failed.\n(" + go + ")." + thisPropertyPath + " failed. Value: " + m_ObjVal;
+            return GetType().Name + " assertion failed.\n(" + go + ")." + thisPropertyPath + " failed. Value: " +
+                   m_ObjVal;
         }
     }
 
@@ -103,19 +116,24 @@ namespace UnityTest
     {
         protected override bool Compare(object objVal)
         {
-            return Compare((T)objVal);
+            return Compare((T) objVal);
         }
+
         protected abstract bool Compare(T objVal);
 
         public override Type[] GetAccepatbleTypesForA()
         {
-            return new[] { typeof(T) };
+            return new[] {typeof (T)};
         }
 
         public override Type GetParameterType()
         {
-            return typeof(T);
+            return typeof (T);
         }
-        protected override bool UseCache { get { return true; } }
+
+        protected override bool UseCache
+        {
+            get { return true; }
+        }
     }
 }

@@ -10,14 +10,22 @@ namespace Assets.Scripts
 {
     public class FileLoader : MonoBehaviour
     {
-        [SerializeField]
-        private string defaultPath = @"C:\Users\squad\Downloads\CAD_Daten_Lagertraeger\Gehaeuserumpf.stl";
+        [SerializeField] private bool cfgSpawnedObject_EnablePhysics = true;
 
-        [SerializeField]
-        private GameObject cfgFileNameField;
-        
-        [SerializeField]
-        private GameObject cfgModelManager;
+        [SerializeField] private bool cfgSpawnedObject_EnableGravity = false;
+
+        [SerializeField] private float cfgSpawnedObject_Drag = 5.28f;
+
+        [SerializeField] private bool cfgSpawnedObject_LockPosition = false;
+
+        [SerializeField] private bool cfgSpawnedObject_LockRotation = true;
+
+        [SerializeField] private string defaultPath =
+            @"C:\Users\squad\Downloads\CAD_Daten_Lagertraeger\Gehaeuserumpf.stl";
+
+        [SerializeField] private GameObject cfgFileNameField;
+
+        [SerializeField] private GameObject cfgModelManager;
 
         private InputField _text;
 
@@ -29,7 +37,13 @@ namespace Assets.Scripts
 
         public void LoadFile()
         {
-            var loader = new CADLoader.CADLoader(new List<IParser> { STPLoader.ParserFactory.Create(), STLLoader.ParserFactory.Create(), ThreeDXMLLoader.ParserFactory.Create() });
+            var loader =
+                new CADLoader.CADLoader(new List<IParser>
+                {
+                    STPLoader.ParserFactory.Create(),
+                    STLLoader.ParserFactory.Create(),
+                    ThreeDXMLLoader.ParserFactory.Create()
+                });
             var dataLoader = LoaderFactory.CreateFileLoader(_text.text);
             var type = CADTypeUtils.FromFileExtension(_text.text);
             var cadModel = loader.Load(type, dataLoader);
@@ -46,10 +60,34 @@ namespace Assets.Scripts
                 go.transform.localPosition = Builder.ToUnity(part.Position);
             }
 
-            //baseObject.AddComponent<Rigidbody>();
-            
+            if (cfgSpawnedObject_EnablePhysics)
+            {
+                var baseObjectRigidbody = baseObject.AddComponent<Rigidbody>();
+                baseObjectRigidbody.angularDrag = cfgSpawnedObject_Drag;
+                baseObjectRigidbody.drag = cfgSpawnedObject_Drag;
+                baseObjectRigidbody.useGravity = cfgSpawnedObject_EnableGravity;
+
+                RigidbodyConstraints constraints = RigidbodyConstraints.None;
+
+                if (cfgSpawnedObject_LockPosition && cfgSpawnedObject_LockRotation)
+                {
+                    constraints = RigidbodyConstraints.FreezeAll;
+                }
+                else if (cfgSpawnedObject_LockPosition && !cfgSpawnedObject_LockRotation)
+                {
+                    constraints = RigidbodyConstraints.FreezePosition;
+                }
+                else if (!cfgSpawnedObject_LockPosition && cfgSpawnedObject_LockRotation)
+                {
+                    constraints = RigidbodyConstraints.FreezeRotation;
+                }
+
+                baseObjectRigidbody.constraints = constraints;
+            }
+
+            baseObject.AddComponent<ModelActions>();
+
             dataLoader.Close();
         }
-        
     }
 }

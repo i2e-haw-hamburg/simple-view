@@ -1,7 +1,6 @@
 #region usages
 
 using UnityEngine;
-
 using System.Collections;
 
 #endregion

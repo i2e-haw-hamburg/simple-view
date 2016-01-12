@@ -63,31 +63,82 @@ namespace UnityTest
         }
 
         #region ITestResult implementation
-        public TestResultState ResultState {
+
+        public TestResultState ResultState
+        {
             get
             {
                 switch (resultType)
                 {
-                    case ResultType.Success: return TestResultState.Success;
-                    case ResultType.Failed: return TestResultState.Failure;
-                    case ResultType.FailedException: return TestResultState.Error;
-                    case ResultType.Ignored: return TestResultState.Ignored;
-                    case ResultType.NotRun: return TestResultState.Skipped;
-                    case ResultType.Timeout: return TestResultState.Cancelled;
-                    default: throw new Exception();
+                    case ResultType.Success:
+                        return TestResultState.Success;
+                    case ResultType.Failed:
+                        return TestResultState.Failure;
+                    case ResultType.FailedException:
+                        return TestResultState.Error;
+                    case ResultType.Ignored:
+                        return TestResultState.Ignored;
+                    case ResultType.NotRun:
+                        return TestResultState.Skipped;
+                    case ResultType.Timeout:
+                        return TestResultState.Cancelled;
+                    default:
+                        throw new Exception();
                 }
             }
         }
-        public string Message { get { return messages; } }
-        public string Logs { get { return null; } }
-        public bool Executed { get { return resultType != ResultType.NotRun; } }
-        public string Name { get { if (m_Go != null) m_Name = m_Go.name; return m_Name; } }
-        public string Id { get { return id; } }
-        public bool IsSuccess { get { return resultType == ResultType.Success; } }
-        public bool IsTimeout { get { return resultType == ResultType.Timeout; } }
-        public double Duration { get { return duration; } }
-        public string StackTrace { get { return stacktrace; } }
-        public string FullName {
+
+        public string Message
+        {
+            get { return messages; }
+        }
+
+        public string Logs
+        {
+            get { return null; }
+        }
+
+        public bool Executed
+        {
+            get { return resultType != ResultType.NotRun; }
+        }
+
+        public string Name
+        {
+            get
+            {
+                if (m_Go != null) m_Name = m_Go.name;
+                return m_Name;
+            }
+        }
+
+        public string Id
+        {
+            get { return id; }
+        }
+
+        public bool IsSuccess
+        {
+            get { return resultType == ResultType.Success; }
+        }
+
+        public bool IsTimeout
+        {
+            get { return resultType == ResultType.Timeout; }
+        }
+
+        public double Duration
+        {
+            get { return duration; }
+        }
+
+        public string StackTrace
+        {
+            get { return stacktrace; }
+        }
+
+        public string FullName
+        {
             get
             {
                 var fullName = Name;
@@ -104,7 +155,11 @@ namespace UnityTest
             }
         }
 
-        public bool IsIgnored { get { return resultType == ResultType.Ignored; } }
+        public bool IsIgnored
+        {
+            get { return resultType == ResultType.Ignored; }
+        }
+
         public bool IsFailure
         {
             get
@@ -114,9 +169,11 @@ namespace UnityTest
                        || resultType == ResultType.Timeout;
             }
         }
+
         #endregion
 
         #region IComparable, GetHashCode and Equals implementation
+
         public override int GetHashCode()
         {
             return id.GetHashCode();
@@ -136,6 +193,7 @@ namespace UnityTest
                 return GetHashCode() == obj.GetHashCode();
             return base.Equals(obj);
         }
+
         #endregion
     }
 }

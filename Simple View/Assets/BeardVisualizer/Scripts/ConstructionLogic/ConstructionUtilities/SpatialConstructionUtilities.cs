@@ -2,7 +2,6 @@
 
 using System;
 using System.Linq;
-
 using UnityEngine;
 
 #endregion
@@ -170,8 +169,8 @@ namespace Assets.Scripts.ConstructionLogic.ConstructionUtilities
         {
             var nextAvailableBlock =
                 Construct.Instance.AllBuildingBlocksOfConstruct.Where(x => x.HasUnconnectedJoints)
-                         .OrderBy(x => Vector3.Distance(x.EntityPosition, blockToAttach.EntityPosition))
-                         .First();
+                    .OrderBy(x => Vector3.Distance(x.EntityPosition, blockToAttach.EntityPosition))
+                    .First();
 
             return nextAvailableBlock;
         }

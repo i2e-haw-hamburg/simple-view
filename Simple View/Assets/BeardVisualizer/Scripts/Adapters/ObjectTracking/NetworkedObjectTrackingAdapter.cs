@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
-
 using BeardWire.Interface.MessageDeliveryOptions;
 
 #endregion
@@ -27,12 +26,9 @@ namespace Assets.Scripts.Adapters.ObjectTracking
     #region usages
 
     using System.Net;
-
     using BeardWire.Interface;
     using BeardWire.Interface.Exceptions;
-
     using global::ObjectTracking.Interface;
-
     using NetworkMessages.ObjectTracking;
 
     #endregion
@@ -69,60 +65,60 @@ namespace Assets.Scripts.Adapters.ObjectTracking
             var remoteAddress = IPAddress.Parse(this.objectTrackingServiceIp);
 
             NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                                 .ConnectToTCPRemote(remoteAddress, this.objectTrackingServicePort);
+                .ConnectToTCPRemote(remoteAddress, this.objectTrackingServicePort);
 
             NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                                 .SubscribeToMessagesOfType<ObjectNew>(
-                                     (message, address, port, id) =>
-                                         {
-                                             var trackedObject = new TrackedObject(
-                                                 message.id,
-                                                 message.object_type,
-                                                 message.pos_x,
-                                                 message.pos_y,
-                                                 message.pos_z);
+                .SubscribeToMessagesOfType<ObjectNew>(
+                    (message, address, port, id) =>
+                    {
+                        var trackedObject = new TrackedObject(
+                            message.id,
+                            message.object_type,
+                            message.pos_x,
+                            message.pos_y,
+                            message.pos_z);
 
-                                             this.trackedObjects.Add(trackedObject);
-                                             this.NewTrackedObjectDetected(trackedObject);
-                                         });
+                        this.trackedObjects.Add(trackedObject);
+                        this.NewTrackedObjectDetected(trackedObject);
+                    });
             NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                                 .SubscribeToMessagesOfType<ObjectLost>(
-                                     (message, remoteEndPoint, localEndPoint, transactionId) =>
-                                         {
-                                             this.trackedObjects.Remove(
-                                                 this.trackedObjects.First(x => x.Id == message.id));
-                                             this.TrackedObjectLost(message.id);
-                                         });
+                .SubscribeToMessagesOfType<ObjectLost>(
+                    (message, remoteEndPoint, localEndPoint, transactionId) =>
+                    {
+                        this.trackedObjects.Remove(
+                            this.trackedObjects.First(x => x.Id == message.id));
+                        this.TrackedObjectLost(message.id);
+                    });
             NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                                 .SubscribeToMessagesOfType<PositionChanged>(
-                                     new MessageDeliveryOptionOnlyLatestInTimeInterval<PositionChanged>(
-                                         (message, remoteEndPoint, localEndPoint, transactionId) =>
-                                         this.TrackedObjectPositionChange(message.id, message.x, message.y, message.z),
-                                         message => "" + message.id,
-                                         30));
+                .SubscribeToMessagesOfType<PositionChanged>(
+                    new MessageDeliveryOptionOnlyLatestInTimeInterval<PositionChanged>(
+                        (message, remoteEndPoint, localEndPoint, transactionId) =>
+                            this.TrackedObjectPositionChange(message.id, message.x, message.y, message.z),
+                        message => "" + message.id,
+                        30));
             NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                                 .SubscribeToMessagesOfType<RotationChanged>(
-                                     new MessageDeliveryOptionOnlyLatestInTimeInterval<RotationChanged>(
-                                         (message, remoteEndPoint, localEndPoint, transactionId) =>
-                                         this.TrackedObjectRotationChange(message.id, message.x, message.y, message.z),
-                                         message => "" + message.id,
-                                         30));
+                .SubscribeToMessagesOfType<RotationChanged>(
+                    new MessageDeliveryOptionOnlyLatestInTimeInterval<RotationChanged>(
+                        (message, remoteEndPoint, localEndPoint, transactionId) =>
+                            this.TrackedObjectRotationChange(message.id, message.x, message.y, message.z),
+                        message => "" + message.id,
+                        30));
 
             var registerMessage = new RegisterForObjectTrackingMessages();
             registerMessage.listenerip = NetworkAdapterFactory.GetUnityNetworkAdapterInstance().LocalAddress.ToString();
             registerMessage.listenerport =
                 NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                                     .EstablishedTcpConnections.Single(
-                                         x =>
-                                         x.RemoteEndPoint.Address.Equals(remoteAddress)
-                                         && x.RemoteEndPoint.Port == this.objectTrackingServicePort)
-                                     .LocalEndPoint.Port;
+                    .EstablishedTcpConnections.Single(
+                        x =>
+                            x.RemoteEndPoint.Address.Equals(remoteAddress)
+                            && x.RemoteEndPoint.Port == this.objectTrackingServicePort)
+                    .LocalEndPoint.Port;
 
             NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                                 .SendMessageOverTCP(
-                                     registerMessage,
-                                     IPAddress.Parse(this.objectTrackingServiceIp),
-                                     this.objectTrackingServicePort);
+                .SendMessageOverTCP(
+                    registerMessage,
+                    IPAddress.Parse(this.objectTrackingServiceIp),
+                    this.objectTrackingServicePort);
         }
 
         public void StopTracking()
@@ -130,9 +126,9 @@ namespace Assets.Scripts.Adapters.ObjectTracking
             try
             {
                 NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                                     .DisconnectFromTCPRemote(
-                                         IPAddress.Parse(this.objectTrackingServiceIp),
-                                         this.objectTrackingServicePort);
+                    .DisconnectFromTCPRemote(
+                        IPAddress.Parse(this.objectTrackingServiceIp),
+                        this.objectTrackingServicePort);
             }
             catch (NotConnectedException)
             {

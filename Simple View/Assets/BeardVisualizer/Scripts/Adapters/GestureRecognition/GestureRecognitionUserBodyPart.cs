@@ -20,8 +20,7 @@ public class GestureRecognitionUserBodyPart : MonoBehaviour
     /// <summary>
     ///     The amount of force, the body part will apply if colliding with something to reach its destination.
     /// </summary>
-    [SerializeField]
-    private float cfgPositionForceMultiplier = 100;
+    [SerializeField] private float cfgPositionForceMultiplier = 100;
 
     /// <summary>
     ///     Keeps track of all gameobjects this body part currently collides with.
@@ -154,7 +153,7 @@ public class GestureRecognitionUserBodyPart : MonoBehaviour
     private void Awake()
     {
         this.CollidingGameObjects = new List<GameObject>();
-    } 
+    }
 
     private void FixedUpdate()
     {

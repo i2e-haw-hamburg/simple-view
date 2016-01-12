@@ -4,7 +4,7 @@ using UnityEngine;
 
 [IntegrationTest.DynamicTestAttribute("ExampleIntegrationTests")]
 // [IntegrationTest.Ignore]
-[IntegrationTest.ExpectExceptions(false, typeof(ArgumentException))]
+[IntegrationTest.ExpectExceptions(false, typeof (ArgumentException))]
 [IntegrationTest.SucceedWithAssertions]
 [IntegrationTest.TimeoutAttribute(1)]
 [IntegrationTest.ExcludePlatformAttribute(RuntimePlatform.Android, RuntimePlatform.LinuxPlayer)]

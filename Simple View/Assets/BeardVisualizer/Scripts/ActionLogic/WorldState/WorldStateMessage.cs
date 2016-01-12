@@ -20,13 +20,8 @@ namespace Assets.Scripts.ActionLogic
 
         public WorldState WorldState
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-            }
+            get { throw new NotImplementedException(); }
+            set { }
         }
 
         #endregion

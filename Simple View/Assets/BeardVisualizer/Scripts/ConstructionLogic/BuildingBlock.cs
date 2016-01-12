@@ -12,7 +12,6 @@ namespace Assets.Scripts.ConstructionLogic
     #region usages
 
     using Assets.Scripts.ConstructionLogic.ConstructionUtilities;
-
     using UnityEngine;
 
     #endregion
@@ -37,10 +36,7 @@ namespace Assets.Scripts.ConstructionLogic
         /// </summary>
         public IList<BlockJoint> BlockJoints
         {
-            get
-            {
-                return this.joints.AsReadOnly();
-            }
+            get { return this.joints.AsReadOnly(); }
         }
 
         /// <summary>
@@ -49,10 +45,7 @@ namespace Assets.Scripts.ConstructionLogic
         /// </summary>
         public IList<BuildingBlock> DirectlyConnectedBuildingBlocks
         {
-            get
-            {
-                return this.joints.Select(x => x.ConnectedBlock).Where(x => x != null).ToList();
-            }
+            get { return this.joints.Select(x => x.ConnectedBlock).Where(x => x != null).ToList(); }
         }
 
         /// <summary>
@@ -61,10 +54,7 @@ namespace Assets.Scripts.ConstructionLogic
         /// </summary>
         public bool HasUnconnectedJoints
         {
-            get
-            {
-                return this.joints.Any(x => !x.ConnectedJoint);
-            }
+            get { return this.joints.Any(x => !x.ConnectedJoint); }
         }
 
         #endregion
@@ -126,11 +116,11 @@ namespace Assets.Scripts.ConstructionLogic
             try
             {
                 SpatialConstructionUtilities.GetNearestUnconnectedJointsWithPredicate(
-                        this,
-                        otherBlock,
-                        out ownJoint,
-                        out otherJoint,
-                        this.GetRestrictionPredicate());
+                    this,
+                    otherBlock,
+                    out ownJoint,
+                    out otherJoint,
+                    this.GetRestrictionPredicate());
             }
             catch (NoValidJointsFoundException)
             {

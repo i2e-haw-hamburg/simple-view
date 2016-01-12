@@ -1,7 +1,6 @@
 #region usages
 
 using UnityEngine;
-
 using System.Collections;
 
 #endregion
@@ -10,8 +9,7 @@ public class ResetMarble : MonoBehaviour
 {
     #region Fields
 
-    [SerializeField]
-    private KeyCode cfgKeyResetMarble = KeyCode.Space;
+    [SerializeField] private KeyCode cfgKeyResetMarble = KeyCode.Space;
 
     private Vector3 startingPos;
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-
 #if UNITY_EDITOR
 using UnityEditor;
+
 #endif
 
 namespace UnityTest
@@ -43,10 +43,11 @@ namespace UnityTest
 
         public bool IsExludedOnThisPlatform()
         {
-            return platformsToIgnore != null && platformsToIgnore.Any(platform => platform == Application.platform.ToString());
+            return platformsToIgnore != null &&
+                   platformsToIgnore.Any(platform => platform == Application.platform.ToString());
         }
 
-        static bool IsAssignableFrom(Type a, Type b)
+        private static bool IsAssignableFrom(Type a, Type b)
         {
 #if !UNITY_METRO
             return a.IsAssignableFrom(b);
@@ -56,19 +57,20 @@ namespace UnityTest
         }
 
         public bool IsExceptionExpected(string exception)
-		{
-			exception = exception.Trim();
-            if (!expectException) 
-				return false;
-			if(string.IsNullOrEmpty(expectedExceptionList.Trim())) 
-				return true;
+        {
+            exception = exception.Trim();
+            if (!expectException)
+                return false;
+            if (string.IsNullOrEmpty(expectedExceptionList.Trim()))
+                return true;
             foreach (var expectedException in expectedExceptionList.Split(',').Select(e => e.Trim()))
             {
-                if (exception == expectedException) 
-					return true;
+                if (exception == expectedException)
+                    return true;
                 var exceptionType = Type.GetType(exception) ?? GetTypeByName(exception);
                 var expectedExceptionType = Type.GetType(expectedException) ?? GetTypeByName(expectedException);
-                if (exceptionType != null && expectedExceptionType != null && IsAssignableFrom(expectedExceptionType, exceptionType))
+                if (exceptionType != null && expectedExceptionType != null &&
+                    IsAssignableFrom(expectedExceptionType, exceptionType))
                     return true;
             }
             return false;
@@ -97,7 +99,10 @@ namespace UnityTest
         private static Type GetTypeByName(string className)
         {
 #if !UNITY_METRO
-            return AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()).FirstOrDefault(type => type.Name == className);
+            return
+                AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(a => a.GetTypes())
+                    .FirstOrDefault(type => type.Name == className);
 #else
             return null;
 #endif
@@ -112,30 +117,30 @@ namespace UnityTest
         [Flags]
         public enum IncludedPlatforms
         {
-            WindowsEditor       = 1 << 0,
-                OSXEditor           = 1 << 1,
-                WindowsPlayer       = 1 << 2,
-                OSXPlayer           = 1 << 3,
-                LinuxPlayer         = 1 << 4,
-                MetroPlayerX86      = 1 << 5,
-                MetroPlayerX64      = 1 << 6,
-                MetroPlayerARM      = 1 << 7,
-                WindowsWebPlayer    = 1 << 8,
-                OSXWebPlayer        = 1 << 9,
-                Android             = 1 << 10,
+            WindowsEditor = 1 << 0,
+            OSXEditor = 1 << 1,
+            WindowsPlayer = 1 << 2,
+            OSXPlayer = 1 << 3,
+            LinuxPlayer = 1 << 4,
+            MetroPlayerX86 = 1 << 5,
+            MetroPlayerX64 = 1 << 6,
+            MetroPlayerARM = 1 << 7,
+            WindowsWebPlayer = 1 << 8,
+            OSXWebPlayer = 1 << 9,
+            Android = 1 << 10,
 // ReSharper disable once InconsistentNaming
-                IPhonePlayer        = 1 << 11,
-                TizenPlayer         = 1 << 12,
-                WP8Player           = 1 << 13,
-                BB10Player          = 1 << 14,
-                NaCl                = 1 << 15,
-                PS3                 = 1 << 16,
-                XBOX360             = 1 << 17,
-                WiiPlayer           = 1 << 18,
-                PSP2                = 1 << 19,
-                PS4                 = 1 << 20,
-                PSMPlayer           = 1 << 21,
-                XboxOne             = 1 << 22,
+            IPhonePlayer = 1 << 11,
+            TizenPlayer = 1 << 12,
+            WP8Player = 1 << 13,
+            BB10Player = 1 << 14,
+            NaCl = 1 << 15,
+            PS3 = 1 << 16,
+            XBOX360 = 1 << 17,
+            WiiPlayer = 1 << 18,
+            PSP2 = 1 << 19,
+            PS4 = 1 << 20,
+            PSMPlayer = 1 << 21,
+            XboxOne = 1 << 22,
         }
 
         #region ITestComponent implementation
@@ -169,14 +174,17 @@ namespace UnityTest
         {
             for (int i = 0; i < gameObject.transform.childCount; i++)
             {
-                var childTc = gameObject.transform.GetChild(i).GetComponent(typeof(TestComponent));
+                var childTc = gameObject.transform.GetChild(i).GetComponent(typeof (TestComponent));
                 if (childTc != null)
                     return true;
             }
             return false;
         }
 
-        public string Name { get { return gameObject == null ? "" : gameObject.name; } }
+        public string Name
+        {
+            get { return gameObject == null ? "" : gameObject.name; }
+        }
 
         public ITestComponent GetTestGroup()
         {
@@ -202,7 +210,7 @@ namespace UnityTest
         {
             if (ReferenceEquals(a, b))
                 return true;
-            if (((object)a == null) || ((object)b == null))
+            if (((object) a == null) || ((object) b == null))
                 return false;
             if (a.dynamic && b.dynamic)
                 return a.dynamicTypeName == b.dynamicTypeName;
@@ -240,7 +248,8 @@ namespace UnityTest
                 else if (typeAttribute is IntegrationTest.SucceedWithAssertions)
                     tc.succeedAfterAllAssertionsAreExecuted = true;
                 else if (typeAttribute is IntegrationTest.ExcludePlatformAttribute)
-                    tc.platformsToIgnore = (typeAttribute as IntegrationTest.ExcludePlatformAttribute).platformsToExclude;
+                    tc.platformsToIgnore =
+                        (typeAttribute as IntegrationTest.ExcludePlatformAttribute).platformsToExclude;
                 else if (typeAttribute is IntegrationTest.ExpectExceptions)
                 {
                     var attribute = (typeAttribute as IntegrationTest.ExpectExceptions);
@@ -250,7 +259,7 @@ namespace UnityTest
                 }
             }
             go.AddComponent(type);
-#endif  // if !UNITY_METRO
+#endif // if !UNITY_METRO
             return tc;
         }
 
@@ -271,12 +280,16 @@ namespace UnityTest
 
         public static List<TestComponent> FindAllTestsOnScene()
         {
-            var tests = Resources.FindObjectsOfTypeAll (typeof(TestComponent)).Cast<TestComponent> ();
+            var tests = Resources.FindObjectsOfTypeAll(typeof (TestComponent)).Cast<TestComponent>();
 #if UNITY_EDITOR
-            tests = tests.Where( t => {var p = PrefabUtility.GetPrefabType(t); return p != PrefabType.Prefab && p != PrefabType.ModelPrefab;} );
+            tests = tests.Where(t =>
+            {
+                var p = PrefabUtility.GetPrefabType(t);
+                return p != PrefabType.Prefab && p != PrefabType.ModelPrefab;
+            });
 
 #endif
-            return tests.ToList ();
+            return tests.ToList();
         }
 
         public static List<TestComponent> FindAllTopTestsOnScene()
@@ -308,7 +321,7 @@ namespace UnityTest
         public static bool AnyDynamicTestForCurrentScene()
         {
 #if UNITY_EDITOR
-                return TestComponent.GetTypesWithHelpAttribute(EditorApplication.currentScene).Any();
+            return TestComponent.GetTypesWithHelpAttribute(EditorApplication.currentScene).Any();
 #else
                 return TestComponent.GetTypesWithHelpAttribute(Application.loadedLevelName).Any();
 #endif
@@ -334,7 +347,11 @@ namespace UnityTest
             }
 
             public GameObject gameObject { get; private set; }
-            public string Name { get { return ""; } }
+
+            public string Name
+            {
+                get { return ""; }
+            }
 
             public ITestComponent GetTestGroup()
             {
@@ -395,7 +412,7 @@ namespace UnityTest
 
                 foreach (Type type in types)
                 {
-                    var attributes = type.GetCustomAttributes(typeof(IntegrationTest.DynamicTestAttribute), true);
+                    var attributes = type.GetCustomAttributes(typeof (IntegrationTest.DynamicTestAttribute), true);
                     if (attributes.Length == 1)
                     {
                         var a = attributes.Single() as IntegrationTest.DynamicTestAttribute;
@@ -403,9 +420,9 @@ namespace UnityTest
                     }
                 }
             }
-#else   // if !UNITY_METRO
+#else // if !UNITY_METRO
             yield break;
-#endif  // if !UNITY_METRO
+#endif // if !UNITY_METRO
         }
     }
 }

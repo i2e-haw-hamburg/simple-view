@@ -12,14 +12,11 @@ namespace Assets.Scripts.Adapters.ObjectTracking
     #region usages
 
     using System.Net.Security;
-
     using Assets.Scripts.ActionLogic;
     using Assets.Scripts.ConstructionLogic;
     using Assets.Scripts.UserActions;
     using Assets.Scripts.Utilities;
-
     using global::ObjectTracking.Interface;
-
     using UnityEngine;
 
     #endregion
@@ -28,8 +25,7 @@ namespace Assets.Scripts.Adapters.ObjectTracking
     {
         #region Fields
 
-        [SerializeField]
-        private GameObject[] cfgMockTrackedObjects;
+        [SerializeField] private GameObject[] cfgMockTrackedObjects;
 
         private Dictionary<GameObject, TrackedObject> trackedObjects;
 

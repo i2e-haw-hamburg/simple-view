@@ -26,10 +26,12 @@ public class TestResultRenderer
             FailedMessagesStyle.richText = true;
         }
     }
-    private readonly Dictionary<string, List<ITestResult>> m_TestCollection = new Dictionary<string, List<ITestResult>>();
+
+    private readonly Dictionary<string, List<ITestResult>> m_TestCollection =
+        new Dictionary<string, List<ITestResult>>();
 
     private bool m_ShowResults;
-    Vector2 m_ScrollPosition;
+    private Vector2 m_ScrollPosition;
     private int m_FailureCount;
 
     public void ShowResults()
@@ -56,7 +58,7 @@ public class TestResultRenderer
         }
         else
         {
-            int count = m_TestCollection.Sum (testGroup => testGroup.Value.Count);
+            int count = m_TestCollection.Sum(testGroup => testGroup.Value.Count);
             GUILayout.Label(count + " tests failed!", Styles.FailedLabelStyle);
 
             m_ScrollPosition = GUILayout.BeginScrollView(m_ScrollPosition, GUILayout.ExpandWidth(true));
@@ -65,9 +67,9 @@ public class TestResultRenderer
             {
                 text += "<b><size=18>" + testGroup.Key + "</size></b>\n";
                 text += string.Join("\n", testGroup.Value
-                                    .Where(result => !result.IsSuccess)
-                                    .Select(result => result.Name + " " + result.ResultState + "\n" + result.Message)
-                                    .ToArray());
+                    .Where(result => !result.IsSuccess)
+                    .Select(result => result.Name + " " + result.ResultState + "\n" + result.Message)
+                    .ToArray());
             }
             GUILayout.TextArea(text, Styles.FailedMessagesStyle);
             GUILayout.EndScrollView();

@@ -13,28 +13,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-
 using Assets.Scripts.Utilities;
-
 using BeardWire.Interface;
 using BeardWire.Interface.MessageDeliveryOptions;
 using NetworkMessages;
-
 using UnityEngine;
 
 public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapter>
 {
-    [SerializeField]
-    private bool cfgDebugChecks = true;
+    /// <summary>
+    /// If true, the Adapter will check the validity of the received body parts.
+    /// </summary>
+    [SerializeField] private bool cfgDebugChecks = true;
 
-    [SerializeField]
-    private GestureRecognitionUserBodyPart cfgBodyPartPrefab;
+    [SerializeField] private GestureRecognitionUserBodyPart cfgBodyPartPrefab;
 
-    [SerializeField]
-    private string cfgGestureRecognitionServiceAddress = "127.0.0.1";
+    [SerializeField] private string cfgDebugGUIGestureRecognitionServiceAddress = "127.0.0.1";
 
-    [SerializeField]
-    private string cfgGestureRecognitionServicePort = "1234";
+    [SerializeField] private string cfgDebugGUIGestureRecognitionServicePort = "11116";
+
+    [SerializeField] private bool cfgShowDebugGUI = true;
 
     private bool connectedToGestureRecognitionService;
 
@@ -44,52 +42,77 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
 
     private Dictionary<long, GestureInterfaceUser> users;
 
-    private void Start()
+    /// <summary>
+    /// Establishes a connection to the gesture recognition service at the specified IP and port.
+    /// </summary>
+    /// <param name="ip"></param>
+    /// <param name="port"></param>
+    public void ConnectToGestureRecognition(IPAddress ip, int port)
     {
-        this.users = new Dictionary<long, GestureInterfaceUser>();
-        
-        NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                             .SubscribeToMessagesOfType<UserRemoveMessage>(this.OnUserRemoveMessage);
-        
-        NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                             .SubscribeToMessagesOfType<UserUpdateMessage>(new MessageDeliveryOptionOnlyLatestInTimeInterval<UserUpdateMessage>(this.OnUserUpdateMessage, message => "UserUpdates" + message.userId, 30));
-        
-        NetworkAdapterInit.Instance.OnShutdown += this.DisconnectFromGestureRecognitionService;
+        try
+        {
+            NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
+                .ConnectToTCPRemote(gestureRecognitionIP, gestureRecognitionPort);
+
+            NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
+                .SendMessageOverTCP(
+                    new RegisterForGestureInterfaceMessage(),
+                    ip,
+                    port);
+
+            connectedToGestureRecognitionService = true;
+        }
+        catch (Exception e)
+        {
+            DefaultLogger.Instance.Error(
+                "Failed to connect to gesture recognition service. See the inner exception for more details:\n\t"
+                + e);
+            throw e;
+        }
     }
 
-    private void DisconnectFromGestureRecognitionService()
+    /// <summary>
+    /// Disconnects from the currently connected gesture recognition adapter.
+    /// </summary>
+    public void DisconnectFromGestureRecognitionService()
     {
+        if (!connectedToGestureRecognitionService)
+        {
+            return;
+        }
+
         DefaultLogger.Instance.Debug("Disconnecting from gesture recognition service.");
 
         try
         {
-            if (this.connectedToGestureRecognitionService)
+            if (connectedToGestureRecognitionService)
             {
                 try
                 {
-                    var userKeys = this.users.Keys.ToArray();
+                    var userKeys = users.Keys.ToArray();
 
-                    for (int i = userKeys.Length - 1; i >= 0; i--)
+                    for (var i = userKeys.Length - 1; i >= 0; i--)
                     {
-                        this.RemoveUserWithID(userKeys[i]);
+                        RemoveUserWithID(userKeys[i]);
                     }
 
-                    this.users.Clear();
+                    users.Clear();
                 }
                 catch (Exception e)
                 {
-                    DefaultLogger.Instance.Error("Error while disconnecting from gesture recognition service service: " + e);
+                    DefaultLogger.Instance.Error(
+                        "Error while disconnecting from gesture recognition service service: " + e);
                 }
-                
-                NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                                     .SendMessageOverTCP(
-                                         new UnregisterFromGestureInterfaceMessage(),
-                                         this.gestureRecognitionIP,
-                                         this.gestureRecognitionPort);
-                NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                                         .DisconnectFromTCPRemote(this.gestureRecognitionIP, this.gestureRecognitionPort);
 
-                this.connectedToGestureRecognitionService = false;
+                NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
+                    .SendMessageOverTCP(
+                        new UnregisterFromGestureInterfaceMessage(),
+                        gestureRecognitionIP,
+                        gestureRecognitionPort);
+                NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
+                    .DisconnectFromTCPRemote(gestureRecognitionIP, gestureRecognitionPort);
+
+                connectedToGestureRecognitionService = false;
             }
         }
         catch (Exception e)
@@ -97,23 +120,45 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
             DefaultLogger.Instance.Error(
                 "Failed to unregister from gesture recognition adapter. See the inner exception for more details:\n\t"
                 + e);
+            throw e;
         }
     }
-    
+
+    private void Start()
+    {
+        users = new Dictionary<long, GestureInterfaceUser>();
+
+        NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
+            .SubscribeToMessagesOfType<UserRemoveMessage>(OnUserRemoveMessage);
+
+        NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
+            .SubscribeToMessagesOfType(
+                new MessageDeliveryOptionOnlyLatestInTimeInterval<UserUpdateMessage>(OnUserUpdateMessage,
+                    message => "UserUpdates" + message.userId, 30));
+
+        NetworkAdapterInit.Instance.OnShutdown += DisconnectFromGestureRecognitionService;
+    }
+
     private void OnGUI()
     {
+        if (!cfgShowDebugGUI)
+        {
+            return;
+        }
+
         GUILayout.Space(100);
 
         var currentInputValid = false;
 
-        if (!this.connectedToGestureRecognitionService)
+        if (!connectedToGestureRecognitionService)
         {
             GUILayout.Label("Gesture recognition service IP Address:");
-            this.cfgGestureRecognitionServiceAddress = GUILayout.TextField(this.cfgGestureRecognitionServiceAddress);
+            cfgDebugGUIGestureRecognitionServiceAddress =
+                GUILayout.TextField(cfgDebugGUIGestureRecognitionServiceAddress);
 
             currentInputValid = IPAddress.TryParse(
-                this.cfgGestureRecognitionServiceAddress,
-                out this.gestureRecognitionIP);
+                cfgDebugGUIGestureRecognitionServiceAddress,
+                out gestureRecognitionIP);
 
             if (!currentInputValid)
             {
@@ -121,10 +166,10 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
             }
 
             GUILayout.Label("Gesture recognition service Port:");
-            this.cfgGestureRecognitionServicePort = GUILayout.TextField(this.cfgGestureRecognitionServicePort);
+            cfgDebugGUIGestureRecognitionServicePort = GUILayout.TextField(cfgDebugGUIGestureRecognitionServicePort);
 
             currentInputValid = currentInputValid
-                                && int.TryParse(this.cfgGestureRecognitionServicePort, out this.gestureRecognitionPort);
+                                && int.TryParse(cfgDebugGUIGestureRecognitionServicePort, out gestureRecognitionPort);
 
             if (!currentInputValid)
             {
@@ -137,16 +182,7 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
             {
                 try
                 {
-                    NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                                         .ConnectToTCPRemote(this.gestureRecognitionIP, this.gestureRecognitionPort);
-
-                    NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                                         .SendMessageOverTCP(
-                                             new RegisterForGestureInterfaceMessage(),
-                                             this.gestureRecognitionIP,
-                                             this.gestureRecognitionPort);
-
-                    this.connectedToGestureRecognitionService = true;
+                    ConnectToGestureRecognition(gestureRecognitionIP, gestureRecognitionPort);
                 }
                 catch (Exception e)
                 {
@@ -162,7 +198,7 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
         {
             if (GUILayout.Button("Disconnect from gesture recognition service."))
             {
-                this.DisconnectFromGestureRecognitionService();
+                DisconnectFromGestureRecognitionService();
             }
         }
     }
@@ -173,26 +209,47 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
         IPEndPoint localEndPoint,
         Guid transactionId)
     {
-        if (!this.users.ContainsKey(message.userId))
+        if (!users.ContainsKey(message.userId))
         {
             DefaultLogger.Instance.Info(
                 "Create new user with ID " + message.userId + ": There is no user registered with this ID.");
             CreateNewUser(message);
         }
-        
-        DefaultLogger.Instance.Debug("Got user update message with following contents:"
-            + "\nuser ID: " + message.userId
-            + "\nbody part positions (X,Y,Z):\n" 
-                + message.bodyPartPositionX.Select(x => x + "").DefaultIfEmpty().Aggregate<string>((a, b) => a + ", " + b) + ";\n"
-                + message.bodyPartPositionY.Select(x => x + "").DefaultIfEmpty().Aggregate<string>((a, b) => a + ", " + b) + ";\n"
-                + message.bodyPartPositionZ.Select(x => x + "").DefaultIfEmpty().Aggregate<string>((a, b) => a + ", " + b)
-            + "\nbody part rotations (X,Y,Z,W):\n"
-                + message.bodyPartRotationX.Select(x => x + "").DefaultIfEmpty().Aggregate<string>((a, b) => a + ", " + b) + ";\n"
-                + message.bodyPartRotationY.Select(x => x + "").DefaultIfEmpty().Aggregate<string>((a, b) => a + ", " + b) + ";\n"
-                + message.bodyPartRotationZ.Select(x => x + "").DefaultIfEmpty().Aggregate<string>((a, b) => a + ", " + b) + ";\n"
-                + message.bodyPartRotationW.Select(x => x + "").DefaultIfEmpty().Aggregate<string>((a, b) => a + ", " + b));
 
-        this.users[message.userId].UpdateUserPositionAndRotation(
+        DefaultLogger.Instance.Debug("Got user update message with following contents:"
+                                     + "\nuser ID: " + message.userId
+                                     + "\nbody part positions (X,Y,Z):\n"
+                                     +
+                                     message.bodyPartPositionX.Select(x => x + "")
+                                         .DefaultIfEmpty()
+                                         .Aggregate((a, b) => a + ", " + b) + ";\n"
+                                     +
+                                     message.bodyPartPositionY.Select(x => x + "")
+                                         .DefaultIfEmpty()
+                                         .Aggregate((a, b) => a + ", " + b) + ";\n"
+                                     +
+                                     message.bodyPartPositionZ.Select(x => x + "")
+                                         .DefaultIfEmpty()
+                                         .Aggregate((a, b) => a + ", " + b)
+                                     + "\nbody part rotations (X,Y,Z,W):\n"
+                                     +
+                                     message.bodyPartRotationX.Select(x => x + "")
+                                         .DefaultIfEmpty()
+                                         .Aggregate((a, b) => a + ", " + b) + ";\n"
+                                     +
+                                     message.bodyPartRotationY.Select(x => x + "")
+                                         .DefaultIfEmpty()
+                                         .Aggregate((a, b) => a + ", " + b) + ";\n"
+                                     +
+                                     message.bodyPartRotationZ.Select(x => x + "")
+                                         .DefaultIfEmpty()
+                                         .Aggregate((a, b) => a + ", " + b) + ";\n"
+                                     +
+                                     message.bodyPartRotationW.Select(x => x + "")
+                                         .DefaultIfEmpty()
+                                         .Aggregate((a, b) => a + ", " + b));
+
+        users[message.userId].UpdateUserPositionAndRotation(
             message.bodyPartId,
             message.bodyPartPositionX,
             message.bodyPartPositionY,
@@ -202,7 +259,7 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
             message.bodyPartRotationZ,
             message.bodyPartRotationW);
 
-        this.users[message.userId].UpdateUserVelocityAndAcceleration(
+        users[message.userId].UpdateUserVelocityAndAcceleration(
             message.bodyPartId,
             message.bodyPartVelocityX,
             message.bodyPartVelocityY,
@@ -211,7 +268,7 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
             message.bodyPartAccelerationY,
             message.bodyPartAccelerationZ);
 
-        this.users[message.userId].UpdateUserAngularVelocityAndAcceleration(
+        users[message.userId].UpdateUserAngularVelocityAndAcceleration(
             message.bodyPartId,
             message.bodyPartAngularVelocityX,
             message.bodyPartAngularVelocityY,
@@ -227,22 +284,22 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
         IPEndPoint localEndPoint,
         Guid transactionId)
     {
-        if (!this.users.ContainsKey(message.userId))
+        if (!users.ContainsKey(message.userId))
         {
             DefaultLogger.Instance.Error(
                 "Failed to remove user with ID " + message.userId + ": There is no user registered with this ID.");
             return;
         }
 
-        this.RemoveUserWithID(message.userId);
+        RemoveUserWithID(message.userId);
     }
 
     private void RemoveUserWithID(long id)
     {
         try
         {
-            this.users[id].DestroyUser();
-            this.users.Remove(id);
+            users[id].DestroyUser();
+            users.Remove(id);
         }
         catch (Exception e)
         {
@@ -279,15 +336,15 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
 
                 var bodyPartLength = message.bodyPartLength[i];
 
-                var bodyPart = Instantiate(this.cfgBodyPartPrefab);
+                var bodyPart = Instantiate(cfgBodyPartPrefab);
                 bodyPart.BodyPartId = message.bodyPartId[i];
                 bodyPart.transform.position = bodyPartInitialPosition;
                 bodyPart.transform.rotation = bodyPartInitialRotation;
                 bodyPart.Length = bodyPartLength;
 
                 var scale = bodyPart.transform.localScale;
-                scale.x = scale.x * 0.1f;
-                scale.z = scale.z * 0.1f;
+                scale.x = scale.x*0.1f;
+                scale.z = scale.z*0.1f;
                 bodyPart.transform.localScale = scale;
 
                 bodyPart.transform.parent = userGameobject.transform;
@@ -312,7 +369,7 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
             }
 
             var newUser = new GestureInterfaceUser(message.userId, userBodyParts, userGameobject);
-            this.users.Add(message.userId, newUser);
+            users.Add(message.userId, newUser);
 
             DefaultLogger.Instance.Debug("Registered new user " + newUser);
         }
@@ -328,11 +385,12 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
     /// </summary>
     private class GestureInterfaceUser
     {
-        public GestureInterfaceUser(long userId, Dictionary<int, GestureRecognitionUserBodyPart> bodyParts, GameObject userRootGameObject)
+        public GestureInterfaceUser(long userId, Dictionary<int, GestureRecognitionUserBodyPart> bodyParts,
+            GameObject userRootGameObject)
         {
-            this.UserId = userId;
-            this.BodyParts = bodyParts;
-            this.UserRootGameObject = userRootGameObject;
+            UserId = userId;
+            BodyParts = bodyParts;
+            UserRootGameObject = userRootGameObject;
         }
 
         public GameObject UserRootGameObject { get; private set; }
@@ -349,18 +407,18 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
 
         public override string ToString()
         {
-            return string.Format("UserId: {0}, BodyParts: {1}", this.UserId, this.BodyParts);
+            return string.Format("UserId: {0}, BodyParts: {1}", UserId, BodyParts);
         }
 
         public void DestroyUser()
         {
-            foreach (var bodyPart in this.BodyParts)
+            foreach (var bodyPart in BodyParts)
             {
                 Destroy(bodyPart.Value);
             }
 
-            Destroy(this.UserRootGameObject);
-            this.BodyParts.Clear();
+            Destroy(UserRootGameObject);
+            BodyParts.Clear();
         }
 
         public void UpdateUserPositionAndRotation(
@@ -436,10 +494,10 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
                 {
                     DefaultLogger.Instance.Debug("Body part with the following ID will be updated: " + bodyPartId);
 
-                    this.BodyParts[bodyPartId].Position =
+                    BodyParts[bodyPartId].Position =
                         ConversionUtilities.NetworkWorldCoordinatesToUnityCoordinates(
                             new Vector3(bodyPartPositionsX[i], bodyPartPositionsY[i], bodyPartPositionsZ[i]));
-                    this.BodyParts[bodyPartId].Rotation = new Quaternion(
+                    BodyParts[bodyPartId].Rotation = new Quaternion(
                         bodyPartRotationsX[i],
                         bodyPartRotationsY[i],
                         bodyPartRotationsZ[i],
@@ -479,10 +537,10 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
                 var bodyPartId = bodyPartIds[i];
                 try
                 {
-                    this.BodyParts[bodyPartId].Velocity =
+                    BodyParts[bodyPartId].Velocity =
                         ConversionUtilities.NetworkWorldCoordinatesToUnityCoordinates(
                             new Vector3(bodyPartVelocitiesX[i], bodyPartVelocitiesY[i], bodyPartVelocitiesZ[i]));
-                    this.BodyParts[bodyPartId].Acceleration =
+                    BodyParts[bodyPartId].Acceleration =
                         ConversionUtilities.NetworkWorldCoordinatesToUnityCoordinates(
                             new Vector3(bodyPartAccelerationsX[i], bodyPartAccelerationsY[i], bodyPartAccelerationsZ[i]));
                 }
@@ -520,13 +578,13 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
                 var bodyPartId = bodyPartIds[i];
                 try
                 {
-                    this.BodyParts[bodyPartId].AngularVelocity =
+                    BodyParts[bodyPartId].AngularVelocity =
                         ConversionUtilities.NetworkWorldCoordinatesToUnityCoordinates(
                             new Vector3(
                                 bodyPartAngularVelocitiesX[i],
                                 bodyPartAngularVelocitiesY[i],
                                 bodyPartAngularVelocitiesZ[i]));
-                    this.BodyParts[bodyPartId].AngularAcceleration =
+                    BodyParts[bodyPartId].AngularAcceleration =
                         ConversionUtilities.NetworkWorldCoordinatesToUnityCoordinates(
                             new Vector3(
                                 bodyPartAngularAccelerationsX[i],

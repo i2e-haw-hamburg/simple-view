@@ -12,9 +12,7 @@ namespace Assets.Scripts.UserActions
     #region usages
 
     using System.Net;
-
     using Assets.Scripts.ConstructionLogic;
-
     using UnityEngine;
 
     #endregion
@@ -45,7 +43,7 @@ namespace Assets.Scripts.UserActions
         {
             var buildingPlan =
                 ConstructionEntityManager.Instance.RegisteredConstructionEntities.OfType<BuildingPlan>()
-                                         .Single(x => x.ID == this.ID);
+                    .Single(x => x.ID == this.ID);
             buildingPlan.AttachInstanceOfBuiltBlockToConstruct();
         }
 
@@ -57,7 +55,7 @@ namespace Assets.Scripts.UserActions
         {
             return
                 ConstructionEntityManager.Instance.RegisteredConstructionEntities.OfType<BuildingPlan>()
-                                         .Any(x => x.ID == this.ID);
+                    .Any(x => x.ID == this.ID);
         }
 
         #endregion

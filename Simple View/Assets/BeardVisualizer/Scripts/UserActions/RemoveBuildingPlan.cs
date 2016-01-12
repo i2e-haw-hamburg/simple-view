@@ -13,9 +13,7 @@ namespace Assets.Scripts.UserActions
 
     using System.Net;
     using System.Xml.Schema;
-
     using Assets.Scripts.ConstructionLogic;
-
     using UnityEngine;
 
     #endregion

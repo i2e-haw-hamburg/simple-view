@@ -94,6 +94,7 @@ namespace UnityTest
     }
 
     #region SerializableTestResult
+
     [Serializable]
     internal class SerializableTestResult : ITestResult
     {
@@ -157,11 +158,12 @@ namespace UnityTest
         {
             get { return stackTrace; }
         }
-        
-        public bool IsIgnored 
+
+        public bool IsIgnored
         {
             get { return isIgnored; }
         }
     }
+
     #endregion
 }

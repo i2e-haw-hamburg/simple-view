@@ -10,35 +10,36 @@ public class Toggle : MonoBehaviour
     /// 
     /// </summary>
     private bool _active = false;
+
     /// <summary>
     /// 
     /// </summary>
-    [SerializeField]
-    private bool cfgDefaultActive = false;
+    [SerializeField] private bool cfgDefaultActive = false;
+
     /// <summary>
     /// 
     /// </summary>
-    [SerializeField]
-    private bool cfgShowOnButtonPress = false;
+    [SerializeField] private bool cfgShowOnButtonPress = false;
+
     /// <summary>
     /// 
     /// </summary>
-    [SerializeField]
-    private GameObject cfgGameObject;
-    
-	void Start ()
-	{
-	    _active = cfgDefaultActive;
+    [SerializeField] private GameObject cfgGameObject;
+
+    private void Start()
+    {
+        _active = cfgDefaultActive;
         this.cfgGameObject.SetActive(_active);
-	}
-	
-	void Update () {
+    }
+
+    private void Update()
+    {
         // TODO: define in config
-	    if (cfgShowOnButtonPress && Input.GetButtonDown("ToggleSideMenu"))
-	    {
-	        ToggleElement();
-	    }
-	}
+        if (cfgShowOnButtonPress && Input.GetButtonDown("ToggleSideMenu"))
+        {
+            ToggleElement();
+        }
+    }
 
     /// <summary>
     /// 

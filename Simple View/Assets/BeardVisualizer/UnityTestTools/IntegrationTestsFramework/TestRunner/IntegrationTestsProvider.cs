@@ -5,9 +5,11 @@ using UnityEngine;
 
 namespace UnityTest.IntegrationTestRunner
 {
-    class IntegrationTestsProvider
+    internal class IntegrationTestsProvider
     {
-        internal Dictionary<ITestComponent, HashSet<ITestComponent>> testCollection = new Dictionary<ITestComponent, HashSet<ITestComponent>>();
+        internal Dictionary<ITestComponent, HashSet<ITestComponent>> testCollection =
+            new Dictionary<ITestComponent, HashSet<ITestComponent>>();
+
         internal ITestComponent currentTestGroup;
         internal IEnumerable<ITestComponent> testToRun;
 
@@ -61,8 +63,8 @@ namespace UnityTest.IntegrationTestRunner
 
         private ITestComponent FindNextTestGroup(ITestComponent testGroup)
         {
-            if (testGroup == null) 
-                throw new Exception ("No test left");
+            if (testGroup == null)
+                throw new Exception("No test left");
 
             if (testCollection[testGroup].Any())
             {

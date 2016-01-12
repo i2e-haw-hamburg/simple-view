@@ -35,10 +35,7 @@ namespace Assets.Scripts.ConstructionLogic
         /// </summary>
         public IList<ConstructionEntity> RegisteredConstructionEntities
         {
-            get
-            {
-                return this.knownEnties.ToList();
-            }
+            get { return this.knownEnties.ToList(); }
         }
 
         #endregion

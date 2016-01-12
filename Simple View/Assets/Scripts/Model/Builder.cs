@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Model
 {
-    static class Builder
+    internal static class Builder
     {
         /// <summary>
         /// 
@@ -17,13 +17,14 @@ namespace Assets.Scripts.Model
         /// <param name="name"></param>
         /// <param name="materialName"></param>
         /// <returns></returns>
-        public static GameObject Create(string name, string materialName=null)
+        public static GameObject Create(string name, string materialName = null)
         {
             var modelObject = new GameObject(name);
             if (materialName != null)
             {
                 modelObject.transform.GetComponent<MeshFilter>();
-                if (!modelObject.transform.GetComponent<MeshFilter>() || !modelObject.transform.GetComponent<MeshRenderer>())
+                if (!modelObject.transform.GetComponent<MeshFilter>() ||
+                    !modelObject.transform.GetComponent<MeshRenderer>())
                 {
                     modelObject.transform.gameObject.AddComponent<MeshFilter>();
                     modelObject.transform.gameObject.AddComponent<MeshRenderer>();
@@ -35,6 +36,7 @@ namespace Assets.Scripts.Model
             }
             return modelObject;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -55,7 +57,7 @@ namespace Assets.Scripts.Model
 
         public static Vector3 ToUnity(AForge.Math.Vector3 v3)
         {
-            return new Vector3(v3.X / 1000, v3.Z / 1000, v3.Y / 1000);
+            return new Vector3(v3.X/1000, v3.Z/1000, v3.Y/1000);
         }
     }
 }

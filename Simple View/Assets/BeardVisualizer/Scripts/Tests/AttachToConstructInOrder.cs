@@ -1,9 +1,7 @@
 #region usages
 
 using Assets.Scripts.ConstructionLogic;
-
 using UnityEngine;
-
 using System.Collections;
 
 #endregion
@@ -12,8 +10,7 @@ public class AttachToConstructInOrder : MonoBehaviour
 {
     #region Fields
 
-    [SerializeField]
-    private BuildingBlock[] cfgBlocksToAttach;
+    [SerializeField] private BuildingBlock[] cfgBlocksToAttach;
 
     #endregion
 

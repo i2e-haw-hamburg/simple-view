@@ -9,7 +9,6 @@ namespace Assets.Scripts.ActionLogic
     #region usages
 
     using System;
-
     using Assets.Scripts.Utilities;
 
     #endregion
@@ -24,13 +23,8 @@ namespace Assets.Scripts.ActionLogic
 
         public IWorldStateHandling IWorldStateHandling
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-            }
+            get { throw new NotImplementedException(); }
+            set { }
         }
 
         #endregion

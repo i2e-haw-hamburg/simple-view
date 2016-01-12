@@ -14,8 +14,8 @@ namespace UnityTest
     [Serializable]
     public class TestRunner : MonoBehaviour
     {
-        static private int TestSceneNumber = 0;
-        static private readonly TestResultRenderer k_ResultRenderer = new TestResultRenderer();
+        private static int TestSceneNumber = 0;
+        private static readonly TestResultRenderer k_ResultRenderer = new TestResultRenderer();
 
         public TestComponent currentTest;
         private List<TestResult> m_ResultList = new List<TestResult>();
@@ -106,7 +106,8 @@ namespace UnityTest
             // create results for tests
             m_ResultList = m_TestComponents.Select(component => new TestResult(component)).ToList();
             // init test provider
-            m_TestsProvider = new IntegrationTestsProvider(m_ResultList.Select(result => result.TestComponent as ITestComponent));
+            m_TestsProvider =
+                new IntegrationTestsProvider(m_ResultList.Select(result => result.TestComponent as ITestComponent));
             m_ReadyToRun = true;
         }
 
@@ -117,10 +118,10 @@ namespace UnityTest
             {
                 if (testResult.IsTestGroup())
                 {
-                    var childrenTestResult = testResult.gameObject.GetComponentsInChildren(typeof(TestComponent), true)
-                                             .Where(t => t != testResult)
-                                             .Cast<TestComponent>()
-                                             .ToArray();
+                    var childrenTestResult = testResult.gameObject.GetComponentsInChildren(typeof (TestComponent), true)
+                        .Where(t => t != testResult)
+                        .Cast<TestComponent>()
+                        .ToArray();
                     foreach (var result in childrenTestResult)
                     {
                         if (!result.IsTestGroup())
@@ -135,7 +136,7 @@ namespace UnityTest
 
         public void Update()
         {
-            if (m_ReadyToRun  && Time.frameCount > 1)
+            if (m_ReadyToRun && Time.frameCount > 1)
             {
                 m_ReadyToRun = false;
                 StartCoroutine("StateMachine");
@@ -165,7 +166,8 @@ namespace UnityTest
             {
                 var msg = condition;
                 if (msg.StartsWith(k_Prefix)) msg = msg.Substring(k_Prefix.Length + 1);
-                if (currentTest != null && msg.EndsWith("(" + currentTest.name + ')')) msg = msg.Substring(0, msg.LastIndexOf('('));
+                if (currentTest != null && msg.EndsWith("(" + currentTest.name + ')'))
+                    msg = msg.Substring(0, msg.LastIndexOf('('));
                 m_TestMessages += msg + "\n";
             }
             switch (type)
@@ -194,7 +196,7 @@ namespace UnityTest
                     m_Stacktrace = stacktrace;
                     break;
                 case LogType.Log:
-                    if (m_TestState ==  TestState.Running && condition.StartsWith(IntegrationTest.passMessage))
+                    if (m_TestState == TestState.Running && condition.StartsWith(IntegrationTest.passMessage))
                     {
                         m_TestState = TestState.Success;
                     }
@@ -224,10 +226,13 @@ namespace UnityTest
                 {
                     if (m_TestState == TestState.Running)
                     {
-                        if(currentTest.ShouldSucceedOnAssertions())
+                        if (currentTest.ShouldSucceedOnAssertions())
                         {
-                            var assertionsToCheck = currentTest.gameObject.GetComponentsInChildren<AssertionComponent>().Where(a => a.enabled).ToArray();
-                            if (assertionsToCheck.Any () && assertionsToCheck.All(a => a.checksPerformed > 0))
+                            var assertionsToCheck =
+                                currentTest.gameObject.GetComponentsInChildren<AssertionComponent>()
+                                    .Where(a => a.enabled)
+                                    .ToArray();
+                            if (assertionsToCheck.Any() && assertionsToCheck.All(a => a.checksPerformed > 0))
                             {
                                 IntegrationTest.Pass(currentTest.gameObject);
                                 m_TestState = TestState.Success;
@@ -289,13 +294,14 @@ namespace UnityTest
             if (m_ResultList.Any(result => result.IsFailure))
             {
                 resultString += " Failed: " + m_ResultList.Count(t => t.IsFailure);
-                Debug.Log("Failed tests: " + string.Join(", ", m_ResultList.Where(t => t.IsFailure).Select(result => result.Name).ToArray()));
+                Debug.Log("Failed tests: " +
+                          string.Join(", ", m_ResultList.Where(t => t.IsFailure).Select(result => result.Name).ToArray()));
             }
             if (m_ResultList.Any(result => result.IsIgnored))
             {
                 resultString += " Ignored: " + m_ResultList.Count(t => t.IsIgnored);
                 Debug.Log("Ignored tests: " + string.Join(", ",
-                                                          m_ResultList.Where(t => t.IsIgnored).Select(result => result.Name).ToArray()));
+                    m_ResultList.Where(t => t.IsIgnored).Select(result => result.Name).ToArray()));
             }
             Debug.Log(resultString);
         }
@@ -306,7 +312,7 @@ namespace UnityTest
 
 
             TestSceneNumber += 1;
-            string testScene = m_Configurator.GetIntegrationTestScenes (TestSceneNumber);
+            string testScene = m_Configurator.GetIntegrationTestScenes(TestSceneNumber);
 
             if (testScene != null)
                 Application.LoadLevel(Path.GetFileNameWithoutExtension(testScene));
@@ -371,10 +377,10 @@ namespace UnityTest
         public static TestRunner GetTestRunner()
         {
             TestRunner testRunnerComponent = null;
-            var testRunnerComponents = Resources.FindObjectsOfTypeAll(typeof(TestRunner));
+            var testRunnerComponents = Resources.FindObjectsOfTypeAll(typeof (TestRunner));
 
             if (testRunnerComponents.Count() > 1)
-                foreach (var t in testRunnerComponents) DestroyImmediate(((TestRunner)t).gameObject);
+                foreach (var t in testRunnerComponents) DestroyImmediate(((TestRunner) t).gameObject);
             else if (!testRunnerComponents.Any())
                 testRunnerComponent = Create().GetComponent<TestRunner>();
             else
@@ -394,22 +400,23 @@ namespace UnityTest
         private static bool IsBatchMode()
         {
 #if !UNITY_METRO
-            const string internalEditorUtilityClassName = "UnityEditorInternal.InternalEditorUtility, UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
+            const string internalEditorUtilityClassName =
+                "UnityEditorInternal.InternalEditorUtility, UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
 
             var t = Type.GetType(internalEditorUtilityClassName, false);
             if (t == null) return false;
 
             const string inBatchModeProperty = "inBatchMode";
             var prop = t.GetProperty(inBatchModeProperty);
-            return (bool)prop.GetValue(null, null);
-#else   // if !UNITY_METRO
+            return (bool) prop.GetValue(null, null);
+#else // if !UNITY_METRO
             return false;
-#endif  // if !UNITY_METRO
+#endif // if !UNITY_METRO
         }
 
         #endregion
 
-        enum TestState
+        private enum TestState
         {
             Running,
             Success,

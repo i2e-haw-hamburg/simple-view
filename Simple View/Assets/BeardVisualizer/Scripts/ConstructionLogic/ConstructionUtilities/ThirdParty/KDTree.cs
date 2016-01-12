@@ -146,7 +146,7 @@ namespace Assets.Scripts.ConstructionLogic.ConstructionUtilities.ThirdParty
         {
             float a = points[inds[stIndex]][axis];
             float b = points[inds[enIndex]][axis];
-            int midIndex = (stIndex + enIndex) / 2;
+            int midIndex = (stIndex + enIndex)/2;
             float m = points[inds[midIndex]][axis];
 
             if (a > b)
@@ -182,7 +182,7 @@ namespace Assets.Scripts.ConstructionLogic.ConstructionUtilities.ThirdParty
         private static KDTree MakeFromPointsInner(int depth, int stIndex, int enIndex, Vector3[] points, int[] inds)
         {
             KDTree root = new KDTree();
-            root.axis = depth % numDims;
+            root.axis = depth%numDims;
             int splitPoint = FindPivotIndex(points, inds, stIndex, enIndex, root.axis);
 
             root.pivotIndex = inds[splitPoint];
@@ -239,9 +239,9 @@ namespace Assets.Scripts.ConstructionLogic.ConstructionUtilities.ThirdParty
                 this.lr[selector].Search(pt, ref bestSqSoFar, ref bestIndex);
             }
 
-            selector = (selector + 1) % 2;
+            selector = (selector + 1)%2;
 
-            float sqPlaneDist = planeDist * planeDist;
+            float sqPlaneDist = planeDist*planeDist;
 
             if ((this.lr[selector] != null) && (bestSqSoFar > sqPlaneDist))
             {

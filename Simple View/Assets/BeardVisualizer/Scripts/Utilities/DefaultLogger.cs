@@ -11,7 +11,6 @@
 // ----------------------------------------------------------------
 
 using BeardLogger.Interface;
-
 using BeardUnityUtilities.Tools;
 
 namespace Assets.Scripts.Utilities
@@ -19,16 +18,13 @@ namespace Assets.Scripts.Utilities
     using System;
     using System.Diagnostics;
     using System.IO;
-
     using UnityEngine;
 
     public class DefaultLogger : MonoBehaviourSingleton<ILogger>, ILogger
     {
-        [SerializeField]
-        private string cfgLogFileName = "default";
+        [SerializeField] private string cfgLogFileName = "default";
 
-        [SerializeField]
-        private LogLevel cfgLogLevel = LogLevel.Warn;
+        [SerializeField] private LogLevel cfgLogLevel = LogLevel.Warn;
 
         private ILogger fileLogger;
 
@@ -75,14 +71,8 @@ namespace Assets.Scripts.Utilities
 
         public LogLevel MessageLoggingThreshhold
         {
-            get
-            {
-                return this.UsedLogger.MessageLoggingThreshhold;
-            }
-            set
-            {
-                this.UsedLogger.MessageLoggingThreshhold = value;
-            }
+            get { return this.UsedLogger.MessageLoggingThreshhold; }
+            set { this.UsedLogger.MessageLoggingThreshhold = value; }
         }
 
         protected override void Initialize()
@@ -124,7 +114,10 @@ namespace Assets.Scripts.Utilities
 
         public override string ToString()
         {
-            return string.Format("CfgLogFileName: {0}, CfgLogLevel: {1}, MessageLoggingThreshhold: {2}, FileLogger: {3}, UsedLogger: {4}", cfgLogFileName, cfgLogLevel, MessageLoggingThreshhold, fileLogger, UsedLogger);
+            return
+                string.Format(
+                    "CfgLogFileName: {0}, CfgLogLevel: {1}, MessageLoggingThreshhold: {2}, FileLogger: {3}, UsedLogger: {4}",
+                    cfgLogFileName, cfgLogLevel, MessageLoggingThreshhold, fileLogger, UsedLogger);
         }
     }
 }

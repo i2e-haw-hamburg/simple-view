@@ -13,9 +13,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
 #endif
-
 #if UNITY_EDITOR
 using UnityEditorInternal;
+
 #endif
 
 namespace UnityTest
@@ -83,7 +83,7 @@ namespace UnityTest
                 var port = line.Substring(idx + 1);
                 m_IPEndPointList.Add(new IPEndPoint(IPAddress.Parse(ip), Int32.Parse(port)));
             }
-#endif  // if UTT_SOCKETS_SUPPORTED
+#endif // if UTT_SOCKETS_SUPPORTED
         }
 
         private static string GetTextFromTextAsset(string fileName)
@@ -124,8 +124,8 @@ namespace UnityTest
         public static List<string> GetAvailableNetworkIPs()
         {
 #if UTT_SOCKETS_SUPPORTED
-            if (!NetworkInterface.GetIsNetworkAvailable()) 
-                return new List<String>{IPAddress.Loopback.ToString()};
+            if (!NetworkInterface.GetIsNetworkAvailable())
+                return new List<String> {IPAddress.Loopback.ToString()};
 
             var ipList = new List<UnicastIPAddressInformation>();
             var allIpsList = new List<UnicastIPAddressInformation>();
@@ -146,27 +146,29 @@ namespace UnityTest
             }
 
             //On Mac 10.10 all interfaces return OperationalStatus.Unknown, thus this workaround
-            if(!ipList.Any()) return allIpsList.Select(i => i.Address.ToString()).ToList();
+            if (!ipList.Any()) return allIpsList.Select(i => i.Address.ToString()).ToList();
 
             // sort ip list by their masks to predict which ip belongs to lan network
             ipList.Sort((ip1, ip2) =>
-                        {
-                            var mask1 = BitConverter.ToInt32(ip1.IPv4Mask.GetAddressBytes().Reverse().ToArray(), 0);
-                            var mask2 = BitConverter.ToInt32(ip2.IPv4Mask.GetAddressBytes().Reverse().ToArray(), 0);
-                            return mask2.CompareTo(mask1);
-                        });
+            {
+                var mask1 = BitConverter.ToInt32(ip1.IPv4Mask.GetAddressBytes().Reverse().ToArray(), 0);
+                var mask2 = BitConverter.ToInt32(ip2.IPv4Mask.GetAddressBytes().Reverse().ToArray(), 0);
+                return mask2.CompareTo(mask1);
+            });
             if (ipList.Count == 0)
-                return new List<String> { IPAddress.Loopback.ToString() };
+                return new List<String> {IPAddress.Loopback.ToString()};
             return ipList.Select(i => i.Address.ToString()).ToList();
 #else
             return new List<string>();
-#endif  // if UTT_SOCKETS_SUPPORTED
+#endif // if UTT_SOCKETS_SUPPORTED
         }
 
         public ITestRunnerCallback ResolveNetworkConnection()
         {
 #if UTT_SOCKETS_SUPPORTED
-            var nrsList = m_IPEndPointList.Select(ipEndPoint => new NetworkResultSender(ipEndPoint.Address.ToString(), ipEndPoint.Port)).ToList();
+            var nrsList =
+                m_IPEndPointList.Select(
+                    ipEndPoint => new NetworkResultSender(ipEndPoint.Address.ToString(), ipEndPoint.Port)).ToList();
 
             var timeout = TimeSpan.FromSeconds(30);
             DateTime startTime = DateTime.Now;
@@ -188,9 +190,10 @@ namespace UnityTest
                 }
                 Thread.Sleep(500);
             }
-            Debug.LogError("Couldn't connect to the server: " + string.Join(", ", m_IPEndPointList.Select(ipep => ipep.Address + ":" + ipep.Port).ToArray()));
+            Debug.LogError("Couldn't connect to the server: " +
+                           string.Join(", ", m_IPEndPointList.Select(ipep => ipep.Address + ":" + ipep.Port).ToArray()));
             sendResultsOverNetwork = false;
-#endif  // if UTT_SOCKETS_SUPPORTED
+#endif // if UTT_SOCKETS_SUPPORTED
             return null;
         }
     }

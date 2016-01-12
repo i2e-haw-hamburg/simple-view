@@ -3,9 +3,7 @@ namespace Assets.Scripts.ConstructionLogic
     #region usages
 
     using System;
-
     using UnityEngine;
-
     using ConstructionUtilities;
 
     #endregion
@@ -17,11 +15,9 @@ namespace Assets.Scripts.ConstructionLogic
     {
         #region Fields
 
-        [SerializeField]
-        private BuildingBlock cfgBuiltBlock;
+        [SerializeField] private BuildingBlock cfgBuiltBlock;
 
-        [SerializeField]
-        private Vector3 cfgBuiltBlockGhostOffset;
+        [SerializeField] private Vector3 cfgBuiltBlockGhostOffset;
 
         private bool selectedByUser = false;
 
@@ -39,10 +35,7 @@ namespace Assets.Scripts.ConstructionLogic
         /// </summary>
         public BuildingBlock BuiltBlock
         {
-            get
-            {
-                return this.cfgBuiltBlock;
-            }
+            get { return this.cfgBuiltBlock; }
         }
 
         #endregion
@@ -59,7 +52,7 @@ namespace Assets.Scripts.ConstructionLogic
                     this.cfgBuiltBlock,
                     this.EntityPosition + this.transform.TransformDirection(this.cfgBuiltBlockGhostOffset),
                     this.EntityRotation) as BuildingBlock;
-            
+
             var block = newBlockInstance;
 
             this.StartCoroutine(Construct.Instance.AttachBuildingBlockAnimated(block));

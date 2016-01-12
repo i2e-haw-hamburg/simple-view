@@ -12,11 +12,8 @@
 
 using System;
 using BeardWire.Interface;
-
 using UnityEngine;
-
 using System.Collections;
-
 using Assets.Scripts.Utilities;
 
 public class NetworkAdapterInit : UnitySingleton<NetworkAdapterInit>
@@ -25,8 +22,7 @@ public class NetworkAdapterInit : UnitySingleton<NetworkAdapterInit>
 
     public event Action OnShutdown;
 
-    [SerializeField]
-    private TextAsset cfgNetworkMessageConfigFile;
+    [SerializeField] private TextAsset cfgNetworkMessageConfigFile;
 
     // Use this for initialization
     protected override void Initialize()

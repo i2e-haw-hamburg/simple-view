@@ -21,15 +21,16 @@ namespace UnityTest
             {
                 case CompareType.MagnitudeEquals:
                     return AreVectorMagnitudeEqual(a.magnitude,
-                                                   b.magnitude,
-                                                   floatingPointError);
+                        b.magnitude,
+                        floatingPointError);
                 case CompareType.MagnitudeNotEquals:
                     return !AreVectorMagnitudeEqual(a.magnitude,
-                                                    b.magnitude,
-                                                    floatingPointError);
+                        b.magnitude,
+                        floatingPointError);
             }
             throw new Exception();
         }
+
         public override int GetDepthOfSearch()
         {
             return 3;

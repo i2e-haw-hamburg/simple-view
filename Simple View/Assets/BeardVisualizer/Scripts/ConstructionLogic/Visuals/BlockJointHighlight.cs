@@ -1,11 +1,8 @@
 #region usages
 
 using Assets.Scripts.ConstructionLogic;
-
 using Holoville.HOTween;
-
 using UnityEngine;
-
 using System.Collections;
 using System.Collections.Generic;
 
@@ -14,7 +11,7 @@ using System.Collections.Generic;
 /// <summary>
 ///     Implements functionality for visibly highlighting joints.
 /// </summary>
-[RequireComponent(typeof(BlockJoint))]
+[RequireComponent(typeof (BlockJoint))]
 public class BlockJointHighlight : MonoBehaviour
 {
     #region Fields
@@ -22,20 +19,17 @@ public class BlockJointHighlight : MonoBehaviour
     /// <summary>
     /// The time the highlighting animation will take.
     /// </summary>
-    [SerializeField]
-    private float cfgHighlightingAnimationTime = 3.0f;
+    [SerializeField] private float cfgHighlightingAnimationTime = 3.0f;
 
     /// <summary>
     ///     The color in which a highlighted joint will be rendered.
     /// </summary>
-    [SerializeField]
-    private Color cfgJointHighlightColor = Color.red;
+    [SerializeField] private Color cfgJointHighlightColor = Color.red;
 
     /// <summary>
     ///     The scale factor that will be applied to the initial scale of the joint. The joint will be scaled to this product if highlighted.
     /// </summary>
-    [SerializeField]
-    private float cfgHighlightScale = 1.5f;
+    [SerializeField] private float cfgHighlightScale = 1.5f;
 
     private Color initialJointColor;
 
@@ -53,7 +47,7 @@ public class BlockJointHighlight : MonoBehaviour
 
     public void Highlight()
     {
-        transform.localScale = initialScale * this.cfgHighlightScale;
+        transform.localScale = initialScale*this.cfgHighlightScale;
         this.jointRenderer.material.color = this.cfgJointHighlightColor;
         this.isJointHighlited = true;
     }
@@ -65,7 +59,7 @@ public class BlockJointHighlight : MonoBehaviour
         this.isJointHighlited = false;
     }
 
-    IList<Tweener> currentActiveTweeners = new List<Tweener>();
+    private IList<Tweener> currentActiveTweeners = new List<Tweener>();
 
     public void HighlightAnimated()
     {
@@ -99,8 +93,10 @@ public class BlockJointHighlight : MonoBehaviour
 
             currentActiveTweeners.Clear();
 
-            var highLightTween = HOTween.To(this.jointRenderer.material, this.cfgHighlightingAnimationTime, "color", this.initialJointColor);
-            var scaleTween = HOTween.To(this.joint.transform, this.cfgHighlightingAnimationTime, "localScale", this.initialScale);
+            var highLightTween = HOTween.To(this.jointRenderer.material, this.cfgHighlightingAnimationTime, "color",
+                this.initialJointColor);
+            var scaleTween = HOTween.To(this.joint.transform, this.cfgHighlightingAnimationTime, "localScale",
+                this.initialScale);
             currentActiveTweeners.Add(highLightTween);
             currentActiveTweeners.Add(scaleTween);
             this.isJointHighlited = false;

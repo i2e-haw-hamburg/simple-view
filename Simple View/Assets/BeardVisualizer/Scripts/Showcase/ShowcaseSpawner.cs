@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShowcaseSpawner : MonoBehaviour {
-
+public class ShowcaseSpawner : MonoBehaviour
+{
     public float SpawnRadius = 3.0f;
 
     public float SpawnDelay = 0.5f;
@@ -11,12 +11,13 @@ public class ShowcaseSpawner : MonoBehaviour {
 
     public GameObject Prefab;
 
-	// Use this for initialization
-	void OnEnable () {
+    // Use this for initialization
+    private void OnEnable()
+    {
         StartCoroutine(SpawnPrefabs());
-	}
+    }
 
-    void OnDisable()
+    private void OnDisable()
     {
         foreach (Transform child in transform)
         {
@@ -24,11 +25,14 @@ public class ShowcaseSpawner : MonoBehaviour {
         }
     }
 
-    IEnumerator SpawnPrefabs()
+    private IEnumerator SpawnPrefabs()
     {
         for (int i = 0; i < numberOfPrefabs; i++)
         {
-            var spawnedInstance = (GameObject) Instantiate(Prefab, transform.position + Random.onUnitSphere * Random.Range(0.0f, SpawnRadius), transform.rotation);
+            var spawnedInstance =
+                (GameObject)
+                    Instantiate(Prefab, transform.position + Random.onUnitSphere*Random.Range(0.0f, SpawnRadius),
+                        transform.rotation);
 
             spawnedInstance.transform.parent = this.transform;
 

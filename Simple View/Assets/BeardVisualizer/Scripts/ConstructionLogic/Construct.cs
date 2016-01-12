@@ -11,9 +11,7 @@ namespace Assets.Scripts.ConstructionLogic
 
     using System;
     using System.Collections;
-
     using Assets.Scripts.ConstructionLogic.ConstructionUtilities;
-
     using UnityEngine;
 
     #endregion
@@ -28,8 +26,7 @@ namespace Assets.Scripts.ConstructionLogic
 
         #region Fields
 
-        [SerializeField]
-        private float cfgAttachAnimationTime = 0.5f;
+        [SerializeField] private float cfgAttachAnimationTime = 0.5f;
 
         #endregion
 
@@ -106,7 +103,8 @@ namespace Assets.Scripts.ConstructionLogic
 
         public void AttachBuildingBlock(BuildingBlock blockToAttach)
         {
-            SpatialConstructionUtilities.GetNextAvailableBuildingBlockInConstruct(blockToAttach).AttachOtherBuildingBlock(blockToAttach);
+            SpatialConstructionUtilities.GetNextAvailableBuildingBlockInConstruct(blockToAttach)
+                .AttachOtherBuildingBlock(blockToAttach);
         }
 
         public IEnumerator AttachBuildingBlockAnimated(BuildingBlock blockToAttach)

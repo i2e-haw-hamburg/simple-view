@@ -16,16 +16,11 @@ using System;
 using System.Collections;
 using System.Net;
 using System.Threading;
-
 using Assets.Scripts.Utilities;
-
 using BeardUtilities.Tools;
-
 using BeardWire.Interface;
 using BeardWire.Interface.MessageDeliveryOptions;
-
 using NetworkMessages;
-
 using UnityEngine;
 
 #endregion
@@ -45,50 +40,39 @@ public class CameraSetup : MonoBehaviour
         PNG
     }
 
-    [SerializeField]
-    private bool cfgCompressImages = true;
+    [SerializeField] private bool cfgCompressImages = true;
 
     /// <summary>
     ///     The amount of compression that is applied to images sent to mobile devices where 1 is highest, 100 is lowest.
     /// </summary>
-    [SerializeField]
-    private int cfgImageCompression = 1;
+    [SerializeField] private int cfgImageCompression = 1;
 
-    [SerializeField]
-    private ImageEncoding cfgImageEncoding = ImageEncoding.JPEG;
+    [SerializeField] private ImageEncoding cfgImageEncoding = ImageEncoding.JPEG;
 
     /// <summary>
     ///     The amount of images that are sent to a mobile device per second.
     /// </summary>
-    [SerializeField]
-    private float cfgImagesSentPerSecond = 30;
+    [SerializeField] private float cfgImagesSentPerSecond = 30;
 
     /// <summary>
     ///     The camera that is used to render the scene localy.
     /// </summary>
-    [SerializeField]
-    private Camera cfgLocalCamera;
+    [SerializeField] private Camera cfgLocalCamera;
 
     /// <summary>
     ///     The camera that is used to render the scene for the mobile devices.
     /// </summary>
-    [SerializeField]
-    private Camera cfgMobileRenderCamera;
+    [SerializeField] private Camera cfgMobileRenderCamera;
 
-    [SerializeField]
-    private int cfgRenderTextureDepth = 24;
+    [SerializeField] private int cfgRenderTextureDepth = 24;
 
-    [SerializeField]
-    private int cfgRenderTextureHeight = 540;
+    [SerializeField] private int cfgRenderTextureHeight = 540;
 
-    [SerializeField]
-    private int cfgRenderTextureWidth = 960;
+    [SerializeField] private int cfgRenderTextureWidth = 960;
 
-    [SerializeField]
-    private Texture2D cfgStaticImage;
+    [SerializeField] private Texture2D cfgStaticImage;
 
-    [SerializeField]
-    private bool cfgUseStaticImage = false;
+    [SerializeField] private bool cfgUseStaticImage = false;
 
     private Color32[] imageColors;
 
@@ -120,15 +104,15 @@ public class CameraSetup : MonoBehaviour
     private void Start()
     {
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                             .SubscribeToMessagesOfType<SetCameraFieldOfViewMessage>(this.OnSetCameraFieldOfView);
+            .SubscribeToMessagesOfType<SetCameraFieldOfViewMessage>(this.OnSetCameraFieldOfView);
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                             .SubscribeToMessagesOfType<SetCameraResolutionMessage>(this.OnSetCameraResolution);
+            .SubscribeToMessagesOfType<SetCameraResolutionMessage>(this.OnSetCameraResolution);
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                             .SubscribeToMessagesOfType(
-                                 new MessageDeliveryOptionOnlyLatestInTimeInterval<SetCameraTransformMessage>(
-                                     this.OnSetCameraTransform,
-                                     message => { return "TransformMessages"; },
-                                     30));
+            .SubscribeToMessagesOfType(
+                new MessageDeliveryOptionOnlyLatestInTimeInterval<SetCameraTransformMessage>(
+                    this.OnSetCameraTransform,
+                    message => { return "TransformMessages"; },
+                    30));
 
         this.workingTexture = new Texture2D(this.cfgRenderTextureWidth, this.cfgRenderTextureHeight);
         this.InitializeRenderTexture(
@@ -144,11 +128,11 @@ public class CameraSetup : MonoBehaviour
         DefaultLogger.Instance.Debug(string.Format("Camera setup {0} is destroyed.", this.ToString()));
 
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                             .UnsubscribeFromMessagesOfType<SetCameraFieldOfViewMessage>(this.OnSetCameraFieldOfView);
+            .UnsubscribeFromMessagesOfType<SetCameraFieldOfViewMessage>(this.OnSetCameraFieldOfView);
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                             .UnsubscribeFromMessagesOfType<SetCameraResolutionMessage>(this.OnSetCameraResolution);
+            .UnsubscribeFromMessagesOfType<SetCameraResolutionMessage>(this.OnSetCameraResolution);
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                             .UnsubscribeFromMessagesOfType<SetCameraTransformMessage>(this.OnSetCameraTransform);
+            .UnsubscribeFromMessagesOfType<SetCameraTransformMessage>(this.OnSetCameraTransform);
     }
 
     private void InitializeRenderTexture(int width, int height, int depth)
@@ -158,7 +142,7 @@ public class CameraSetup : MonoBehaviour
             this.renderTexture.Release();
         }
 
-        this.imageData = new byte[width * height * 4];
+        this.imageData = new byte[width*height*4];
         this.renderTexture = new RenderTexture(width, height, depth);
         this.cfgMobileRenderCamera.targetTexture = this.renderTexture;
     }
@@ -310,7 +294,7 @@ public class CameraSetup : MonoBehaviour
 
         while (true)
         {
-            yield return new WaitForSeconds(1.0f / this.cfgImagesSentPerSecond);
+            yield return new WaitForSeconds(1.0f/this.cfgImagesSentPerSecond);
             yield return new WaitForEndOfFrame();
 
             DefaultLogger.Instance.Debug(string.Format("Sending camera update to mobile device: {0}", this.ToString()));
@@ -374,25 +358,25 @@ public class CameraSetup : MonoBehaviour
                 // Make sure Instance gets not called from a thread, this could upset Unity.
                 ThreadPool.QueueUserWorkItem(
                     state =>
+                    {
+                        try
                         {
-                            try
-                            {
-                                NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                                                     .SendMessageOverTCP(
-                                                         screenMessage,
-                                                         this.DeviceAddress,
-                                                         this.DevicePort);
-                            }
-                            catch (Exception e)
-                            {
-                                loggerForError.Error(
-                                    string.Format(
-                                        "Error while sending message to mobile device:{0}\n{1}",
-                                        " Device ID: " + this.DeviceId + ", Device Address: " + this.DeviceAddress
-                                        + ", Device Port:" + this.DevicePort,
-                                        e));
-                            }
-                        });
+                            NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
+                                .SendMessageOverTCP(
+                                    screenMessage,
+                                    this.DeviceAddress,
+                                    this.DevicePort);
+                        }
+                        catch (Exception e)
+                        {
+                            loggerForError.Error(
+                                string.Format(
+                                    "Error while sending message to mobile device:{0}\n{1}",
+                                    " Device ID: " + this.DeviceId + ", Device Address: " + this.DeviceAddress
+                                    + ", Device Port:" + this.DevicePort,
+                                    e));
+                        }
+                    });
             }
             catch (Exception e)
             {

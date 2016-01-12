@@ -42,11 +42,11 @@ namespace UnityTest
                 var member = fullCallStack[i];
                 result = GetValueFromMember(result, member);
                 tempCallstack.Add(member);
-				if (result == null) return null;
-				var type = result.GetType();
+                if (result == null) return null;
+                var type = result.GetType();
 
-				//String is not a value type but we don't want to cache it
-				if (!IsValueType(type) && type != typeof(System.String))
+                //String is not a value type but we don't want to cache it
+                if (!IsValueType(type) && type != typeof (System.String))
                 {
                     tempCallstack.Clear();
                     m_CallingObjectRef = result;
@@ -70,6 +70,7 @@ namespace UnityTest
         }
 
         #region Static wrappers
+
         public static bool TryGetMemberType(GameObject gameObject, string path, out Type value)
         {
             try
@@ -99,6 +100,7 @@ namespace UnityTest
                 return false;
             }
         }
+
         #endregion
 
         private object GetValueFromMember(object obj, MemberInfo memberInfo)
@@ -126,7 +128,7 @@ namespace UnityTest
             var propsQueue = new Queue<string>(m_Path.Split('.'));
 
             Type type = GetBaseObject().GetType();
-            if (type != typeof(GameObject))
+            if (type != typeof (GameObject))
                 propsQueue.Dequeue();
 
             PropertyInfo propertyTemp;
@@ -171,36 +173,36 @@ namespace UnityTest
 
         private static bool IsValueType(Type type)
         {
-            #if !UNITY_METRO
+#if !UNITY_METRO
             return type.IsValueType;
-            #else
+#else
             return false;
             #endif
         }
 
         private static FieldInfo GetField(Type type, string fieldName)
         {
-            #if !UNITY_METRO
+#if !UNITY_METRO
             return type.GetField(fieldName);
-            #else
+#else
             return null;
             #endif
         }
 
         private static PropertyInfo GetProperty(Type type, string propertyName)
         {
-            #if !UNITY_METRO
+#if !UNITY_METRO
             return type.GetProperty(propertyName);
-            #else
+#else
             return null;
             #endif
         }
 
         private static MethodInfo GetGetMethod(PropertyInfo propertyInfo)
         {
-            #if !UNITY_METRO
+#if !UNITY_METRO
             return propertyInfo.GetGetMethod();
-            #else
+#else
             return null;
             #endif
         }

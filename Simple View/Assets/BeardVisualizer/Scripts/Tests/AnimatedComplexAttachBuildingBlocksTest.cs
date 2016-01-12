@@ -3,7 +3,6 @@
 using System;
 using System.Collections;
 using System.Linq;
-
 using UnityEngine;
 
 #endregion
@@ -13,7 +12,6 @@ namespace Assets.Scripts.Tests
     #region usages
 
     using Assets.Scripts.ConstructionLogic;
-
     using Random = UnityEngine.Random;
 
     #endregion
@@ -22,11 +20,9 @@ namespace Assets.Scripts.Tests
     {
         #region Fields
 
-        [SerializeField]
-        private Wave[] cfgAttachedBlocksWaves;
+        [SerializeField] private Wave[] cfgAttachedBlocksWaves;
 
-        [SerializeField]
-        private BuildingBlock cfgRootBlock;
+        [SerializeField] private BuildingBlock cfgRootBlock;
 
         #endregion
 
@@ -38,7 +34,7 @@ namespace Assets.Scripts.Tests
         {
             float animationTime = 1.5f;
 
-            BuildingBlock[] availableBlocks = new[] { this.cfgRootBlock };
+            BuildingBlock[] availableBlocks = new[] {this.cfgRootBlock};
 
             this.cfgRootBlock.EntityRotation = Random.rotation;
 
@@ -46,7 +42,7 @@ namespace Assets.Scripts.Tests
             {
                 foreach (var block in wave.Blocks)
                 {
-                    block.EntityPosition = Random.onUnitSphere * Random.Range(3.0f, 10.0f);
+                    block.EntityPosition = Random.onUnitSphere*Random.Range(3.0f, 10.0f);
                     block.EntityRotation = Random.rotation;
                 }
             }

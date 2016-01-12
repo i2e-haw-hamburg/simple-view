@@ -1,11 +1,8 @@
 #region usages
 
 using System.Linq;
-
 using Assets.Scripts.ConstructionLogic;
-
 using UnityEngine;
-
 using System.Collections;
 
 #endregion
@@ -14,8 +11,7 @@ public class AttachToConstructOnClick : MonoBehaviour
 {
     #region Fields
 
-    [SerializeField]
-    private KeyCode cfgKeyToAttach = KeyCode.Space;
+    [SerializeField] private KeyCode cfgKeyToAttach = KeyCode.Space;
 
     private BuildingPlan plan;
 
@@ -36,7 +32,7 @@ public class AttachToConstructOnClick : MonoBehaviour
             if (ObjectTrackingAdapter.Instance.CurrentlySelectedEntity.ID == this.plan.ID)
             {
                 this.plan.AttachInstanceOfBuiltBlockToConstruct();
-            }            
+            }
         }
     }
 

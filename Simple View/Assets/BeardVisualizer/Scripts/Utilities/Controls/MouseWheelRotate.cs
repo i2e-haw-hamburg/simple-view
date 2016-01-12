@@ -1,7 +1,6 @@
 #region usages
 
 using UnityEngine;
-
 using System.Collections;
 
 #endregion
@@ -10,8 +9,7 @@ public class MouseWheelRotate : MonoBehaviour
 {
     #region Fields
 
-    [SerializeField]
-    private float cfgRotationSpeed = 1.0f;
+    [SerializeField] private float cfgRotationSpeed = 1.0f;
 
     private bool mouseOver = false;
 

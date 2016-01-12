@@ -3,21 +3,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Assets.Scripts.ActionLogic;
 using Assets.Scripts.Adapters.ObjectTracking;
 using Assets.Scripts.ConstructionLogic;
 using Assets.Scripts.UserActions;
 using Assets.Scripts.Utilities;
-
 using BeardLogger.Interface;
-
 using ObjectTracking.Interface;
-
 using UnityEngine;
-
 using System.Collections;
-
 using BeardUnityUtilities.Threading;
 
 #endregion
@@ -26,20 +20,15 @@ public class ObjectTrackingAdapter : UnitySingleton<ObjectTrackingAdapter>
 {
     #region Fields
 
-    [SerializeField]
-    private bool cfgDebugMessages = false;
+    [SerializeField] private bool cfgDebugMessages = false;
 
-    [SerializeField]
-    private float cfgPositionScale = 10.0f;
+    [SerializeField] private float cfgPositionScale = 10.0f;
 
-    [SerializeField]
-    private TrackedObjectType[] cfgTrackedObjectTypeIDs;
+    [SerializeField] private TrackedObjectType[] cfgTrackedObjectTypeIDs;
 
-    [SerializeField]
-    private string cfgObjectTrackingServiceIp;
+    [SerializeField] private string cfgObjectTrackingServiceIp;
 
-    [SerializeField]
-    private int cfgObjectTrackingServicePort;
+    [SerializeField] private int cfgObjectTrackingServicePort;
 
     private NetworkedObjectTrackingAdapter objectTracking;
 
@@ -79,7 +68,8 @@ public class ObjectTrackingAdapter : UnitySingleton<ObjectTrackingAdapter>
             {
                 try
                 {
-                    this.objectTracking = new NetworkedObjectTrackingAdapter(this.cfgObjectTrackingServiceIp, this.cfgObjectTrackingServicePort);
+                    this.objectTracking = new NetworkedObjectTrackingAdapter(this.cfgObjectTrackingServiceIp,
+                        this.cfgObjectTrackingServicePort);
 
                     this.objectTracking.NewTrackedObjectDetected += this.ObjectTrackingOnNewTrackedObjectDetected;
                     this.objectTracking.TrackedObjectLost += this.ObjectTrackingOnTrackedObjectLost;
@@ -166,7 +156,7 @@ public class ObjectTrackingAdapter : UnitySingleton<ObjectTrackingAdapter>
         }
 
         var convertedPosition = this.ConvertPosition(new Vector3(x, y, z));
-        var scaledPosition = convertedPosition * this.cfgPositionScale;
+        var scaledPosition = convertedPosition*this.cfgPositionScale;
 
         ActionRequester.Instance.RequestAction(new BuildingPlanMoved(id, scaledPosition));
     }

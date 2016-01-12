@@ -5,10 +5,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityTest.IntegrationTestRunner;
-
 #if UTT_SOCKETS_SUPPORTED
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
+
 #endif
 
 namespace UnityTest
@@ -34,7 +34,7 @@ namespace UnityTest
         private bool SendDTO(ResultDTO dto)
         {
             if (m_LostConnection) return false;
-#if UTT_SOCKETS_SUPPORTED 
+#if UTT_SOCKETS_SUPPORTED
             try
             {
                 using (var tcpClient = new TcpClient())
@@ -68,7 +68,7 @@ namespace UnityTest
                 m_LostConnection = true;
                 return false;
             }
-#endif  // if UTT_SOCKETS_SUPPORTED
+#endif // if UTT_SOCKETS_SUPPORTED
             return true;
         }
 
@@ -101,7 +101,7 @@ namespace UnityTest
 
         public void AllScenesFinished()
         {
-            SendDTO (ResultDTO.CreateAllScenesFinished ());
+            SendDTO(ResultDTO.CreateAllScenesFinished());
         }
 
         public void TestRunInterrupted(List<ITestComponent> testsNotRun)

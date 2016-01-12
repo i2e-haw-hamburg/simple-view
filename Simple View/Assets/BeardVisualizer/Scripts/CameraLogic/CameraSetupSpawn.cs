@@ -14,15 +14,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-
 using Assets.Scripts.Utilities;
-
 using BeardWire.Interface;
-
 using NetworkMessages;
-
 using UnityEngine;
-
 using Object = UnityEngine.Object;
 
 public class CameraSetupSpawn : MonoBehaviour
@@ -30,14 +25,12 @@ public class CameraSetupSpawn : MonoBehaviour
     /// <summary>
     ///     The prefab that will be used to spawn new camera setups.
     /// </summary>
-    [SerializeField]
-    private CameraSetup cfgCameraSetupPrefab;
+    [SerializeField] private CameraSetup cfgCameraSetupPrefab;
 
     /// <summary>
     ///     The TCP port, the adapter will listen to incoming connections from mobile devices.
     /// </summary>
-    [SerializeField]
-    private int cfgMobileDeviceCommunicationPort = 30000;
+    [SerializeField] private int cfgMobileDeviceCommunicationPort = 30000;
 
     /// <summary>
     ///     Holds all mobile devices that have been registered. These devices will receive the camera output.
@@ -47,13 +40,13 @@ public class CameraSetupSpawn : MonoBehaviour
     private void Start()
     {
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                             .StartListeningForMessagesOnTCPPort(this.cfgMobileDeviceCommunicationPort);
+            .StartListeningForMessagesOnTCPPort(this.cfgMobileDeviceCommunicationPort);
         this.connectedMobileDevices = new List<CameraSetup>();
 
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                             .SubscribeToMessagesOfType<RegisterMobileDeviceMessage>(this.OnMobileDeviceRegistered);
+            .SubscribeToMessagesOfType<RegisterMobileDeviceMessage>(this.OnMobileDeviceRegistered);
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                             .SubscribeToMessagesOfType<UnregisterMobileDeviceMessage>(this.OnMobileDeviceUnregistered);
+            .SubscribeToMessagesOfType<UnregisterMobileDeviceMessage>(this.OnMobileDeviceUnregistered);
     }
 
     private void OnMobileDeviceUnregistered(

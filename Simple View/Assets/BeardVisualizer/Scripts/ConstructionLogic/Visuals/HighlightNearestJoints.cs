@@ -2,12 +2,9 @@
 
 using System.Collections.Generic;
 using System.Linq;
-
 using Assets.Scripts.ConstructionLogic;
 using Assets.Scripts.ConstructionLogic.ConstructionUtilities;
-
 using UnityEngine;
-
 using System.Collections;
 
 #endregion
@@ -33,10 +30,7 @@ public class HighlightNearestJoints : MonoBehaviour
     /// </summary>
     public bool HighlightingActive
     {
-        get
-        {
-            return this.highlightingActive;
-        }
+        get { return this.highlightingActive; }
         set
         {
             if (this.highlightingActive && !value)

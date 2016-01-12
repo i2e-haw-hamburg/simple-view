@@ -1,21 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LevelLoader : MonoBehaviour {
-
+public class LevelLoader : MonoBehaviour
+{
     public KeyCode RELEASETHEBALLS;
 
     public GameObject BALLS;
 
     public GameObject[] Showcases;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Use this for initialization
+    private void Start()
+    {
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             for (int i = 0; i < Showcases.Length; i++)
@@ -23,7 +24,8 @@ public class LevelLoader : MonoBehaviour {
                 Showcases[i].SetActiveRecursively(false);
             }
             Showcases[0].SetActiveRecursively(true);
-        } else if (Input.GetKeyDown(KeyCode.Alpha2))
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             for (int i = 0; i < Showcases.Length; i++)
             {
@@ -36,5 +38,5 @@ public class LevelLoader : MonoBehaviour {
         {
             BALLS.SetActiveRecursively(!BALLS.activeInHierarchy);
         }
-	}
+    }
 }

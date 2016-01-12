@@ -6,7 +6,6 @@ using System.Text;
 namespace ObjectTracking.Interface
 {
     using UnityEngine;
-
     using Object = System.Object;
 
     /// <summary>
@@ -25,7 +24,7 @@ namespace ObjectTracking.Interface
         /// The category of the physical object. Different categories could have different behaviours in the virtual representation. The semantics of the different values are defined in the visualization. This component obviously doesn't care about the semantics of this property. 
         /// </summary>
         public int TrackedObjectType { get; private set; }
-        
+
         /// <summary>
         /// The X-coordinate of the position of the object in world-space (in meters).
         /// </summary>
@@ -56,13 +55,14 @@ namespace ObjectTracking.Interface
         /// </summary>
         public float RotationZ { get; private set; }
 
-        public TrackedObject(long id, int trackedObjectType, float positionX, float positionY, float positionZ, float rotationX = 0, float rotationY = 0, float rotationZ = 0)
+        public TrackedObject(long id, int trackedObjectType, float positionX, float positionY, float positionZ,
+            float rotationX = 0, float rotationY = 0, float rotationZ = 0)
         {
             this.Id = id;
             this.TrackedObjectType = trackedObjectType;
-            this.PositionX = positionX / mm_to_m;
-            this.PositionY = positionY / mm_to_m;
-            this.PositionZ = positionZ / mm_to_m;
+            this.PositionX = positionX/mm_to_m;
+            this.PositionY = positionY/mm_to_m;
+            this.PositionZ = positionZ/mm_to_m;
             this.RotationX = rotationX;
             this.RotationY = rotationY;
             this.RotationZ = rotationZ;
@@ -86,5 +86,4 @@ namespace ObjectTracking.Interface
             return hash;
         }
     }
-
 }

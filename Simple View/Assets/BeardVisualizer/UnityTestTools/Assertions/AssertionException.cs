@@ -15,10 +15,7 @@ namespace UnityTest
 
         public override string StackTrace
         {
-            get
-            {
-                return "Created in " + m_Assertion.GetCreationLocation();
-            }
+            get { return "Created in " + m_Assertion.GetCreationLocation(); }
         }
     }
 }

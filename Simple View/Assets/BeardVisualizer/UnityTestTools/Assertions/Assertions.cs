@@ -9,7 +9,7 @@ namespace UnityTest
     {
         public static void CheckAssertions()
         {
-            var assertions = Object.FindObjectsOfType(typeof(AssertionComponent)) as AssertionComponent[];
+            var assertions = Object.FindObjectsOfType(typeof (AssertionComponent)) as AssertionComponent[];
             CheckAssertions(assertions);
         }
 

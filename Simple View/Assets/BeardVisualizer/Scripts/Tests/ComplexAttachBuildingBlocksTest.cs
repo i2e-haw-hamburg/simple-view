@@ -16,11 +16,9 @@ namespace Assets.Scripts.Tests
     {
         #region Fields
 
-        [SerializeField]
-        private BuildingBlock[] cfgAttachedBlocks;
+        [SerializeField] private BuildingBlock[] cfgAttachedBlocks;
 
-        [SerializeField]
-        private BuildingBlock cfgRootBlock;
+        [SerializeField] private BuildingBlock cfgRootBlock;
 
         #endregion
 

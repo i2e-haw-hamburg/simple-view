@@ -55,6 +55,7 @@ namespace UnityTest
         #region Const value
 
         public virtual object ConstValue { get; set; }
+
         public virtual object GetDefaultConstValue()
         {
             throw new NotImplementedException();
@@ -64,7 +65,8 @@ namespace UnityTest
 
         public override string GetFailureMessage()
         {
-            var message = GetType().Name + " assertion failed.\n" + go.name + "." + thisPropertyPath + " " + compareToType;
+            var message = GetType().Name + " assertion failed.\n" + go.name + "." + thisPropertyPath + " " +
+                          compareToType;
             switch (compareToType)
             {
                 case CompareToType.CompareToObject:
@@ -94,14 +96,8 @@ namespace UnityTest
 
         public override Object ConstValue
         {
-            get
-            {
-                return constantValueGeneric;
-            }
-            set
-            {
-                constantValueGeneric = (T2)value;
-            }
+            get { return constantValueGeneric; }
+            set { constantValueGeneric = (T2) value; }
         }
 
         public override Object GetDefaultConstValue()
@@ -109,7 +105,7 @@ namespace UnityTest
             return default(T2);
         }
 
-        static bool IsValueType(Type type)
+        private static bool IsValueType(Type type)
         {
 #if !UNITY_METRO
             return type.IsValueType;
@@ -120,26 +116,29 @@ namespace UnityTest
 
         protected override bool Compare(object a, object b)
         {
-            var type = typeof(T2);
+            var type = typeof (T2);
             if (b == null && IsValueType(type))
             {
                 throw new ArgumentException("Null was passed to a value-type argument");
             }
-            return Compare((T1)a, (T2)b);
+            return Compare((T1) a, (T2) b);
         }
 
         protected abstract bool Compare(T1 a, T2 b);
 
         public override Type[] GetAccepatbleTypesForA()
         {
-            return new[] { typeof(T1) };
+            return new[] {typeof (T1)};
         }
 
         public override Type[] GetAccepatbleTypesForB()
         {
-            return new[] {typeof(T2)};
+            return new[] {typeof (T2)};
         }
 
-        protected override bool UseCache { get { return true; } }
+        protected override bool UseCache
+        {
+            get { return true; }
+        }
     }
 }

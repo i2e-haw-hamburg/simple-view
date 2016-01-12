@@ -32,14 +32,8 @@ namespace Assets.Scripts.ConstructionLogic
         /// </summary>
         public Vector3 EntityPosition
         {
-            get
-            {
-                return this.transform.position;
-            }
-            set
-            {
-                this.transform.position = value;
-            }
+            get { return this.transform.position; }
+            set { this.transform.position = value; }
         }
 
         /// <summary>
@@ -47,14 +41,8 @@ namespace Assets.Scripts.ConstructionLogic
         /// </summary>
         public Quaternion EntityRotation
         {
-            get
-            {
-                return this.transform.rotation;
-            }
-            set
-            {
-                this.transform.rotation = value;
-            }
+            get { return this.transform.rotation; }
+            set { this.transform.rotation = value; }
         }
 
         /// <summary>
@@ -62,10 +50,7 @@ namespace Assets.Scripts.ConstructionLogic
         /// </summary>
         public long ID
         {
-            get
-            {
-                return this.id;
-            }
+            get { return this.id; }
 
             set
             {
@@ -91,15 +76,9 @@ namespace Assets.Scripts.ConstructionLogic
         /// </summary>
         public Vector3 LocalEntityPosition
         {
-            get
-            {
-                return this.transform.localPosition;
-            }
+            get { return this.transform.localPosition; }
 
-            set
-            {
-                this.transform.localPosition = value;
-            }
+            set { this.transform.localPosition = value; }
         }
 
         #endregion
@@ -128,14 +107,14 @@ namespace Assets.Scripts.ConstructionLogic
             {
                 return false;
             }
-            return this.Equals((ConstructionEntity)obj);
+            return this.Equals((ConstructionEntity) obj);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                return (base.GetHashCode() * 397) ^ this.ID.GetHashCode();
+                return (base.GetHashCode()*397) ^ this.ID.GetHashCode();
             }
         }
 

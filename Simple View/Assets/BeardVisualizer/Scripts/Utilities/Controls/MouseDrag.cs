@@ -1,9 +1,7 @@
 #region usages
 
 using System.Linq;
-
 using UnityEngine;
-
 using System.Collections;
 
 #endregion
@@ -12,8 +10,7 @@ public class MouseDrag : MonoBehaviour
 {
     #region Fields
 
-    [SerializeField]
-    private Vector3 cfgDragOffset = Vector3.up;
+    [SerializeField] private Vector3 cfgDragOffset = Vector3.up;
 
     private Vector3 screenPoint;
 
@@ -31,7 +28,8 @@ public class MouseDrag : MonoBehaviour
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hits = Physics.RaycastAll(ray);
 
-        var nearestHit = hits.Where(x => x.collider != this.GetComponent<Collider>()).OrderBy(x => x.distance).FirstOrDefault();
+        var nearestHit =
+            hits.Where(x => x.collider != this.GetComponent<Collider>()).OrderBy(x => x.distance).FirstOrDefault();
 
         this.transform.position = nearestHit.point + this.cfgDragOffset;
     }

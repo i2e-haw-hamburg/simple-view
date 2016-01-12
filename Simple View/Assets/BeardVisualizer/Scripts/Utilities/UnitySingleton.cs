@@ -37,7 +37,7 @@ namespace Assets.Scripts.Utilities
                 {
                     if (!isApplicationQuitting)
                     {
-                        instance = new GameObject(typeof(T).Name).AddComponent<T>();
+                        instance = new GameObject(typeof (T).Name).AddComponent<T>();
                     }
                     else
                     {

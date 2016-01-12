@@ -16,7 +16,7 @@ public class HOTweenDemoBrain : MonoBehaviour
     // ===================================================================================
     // UNITY METHODS ---------------------------------------------------------------------
 
-    void Start()
+    private void Start()
     {
         // HOTWEEN INITIALIZATION
         // Must be done only once, before the creation of your first tween
@@ -40,19 +40,25 @@ public class HOTweenDemoBrain : MonoBehaviour
         // (a transform, in this case)
         HOTween.To(CubeTrans2, 3, new TweenParms()
             .Prop("position", new Vector3(0, 6, 0), true) // Position tween (set as relative)
-            .Prop("rotation", new Vector3(0, 1024, 0), true) // Relative rotation tween (this way rotations higher than 360 can be applied)
+            .Prop("rotation", new Vector3(0, 1024, 0), true)
+            // Relative rotation tween (this way rotations higher than 360 can be applied)
             .Loops(-1, LoopType.Yoyo) // Infinite yoyo loops
             .Ease(EaseType.EaseInOutQuad) // Ease
             .OnStepComplete(Cube2StepComplete) // OnComplete callback
-        );
+            );
 
         // Tween the sample string using full mode with parameters and without linebreaks.
         // The result will be shown using OnGUI
-        HOTween.To(this, 3, new TweenParms().Prop("SampleString", "Hello I'm a sample tweened string").Ease(EaseType.Linear).Loops(-1, LoopType.Yoyo));
+        HOTween.To(this, 3,
+            new TweenParms().Prop("SampleString", "Hello I'm a sample tweened string")
+                .Ease(EaseType.Linear)
+                .Loops(-1, LoopType.Yoyo));
 
         // Tween the sample floating point number while creating TweenParms first,
         // and then assigning it to HOTween.
-        TweenParms tweenParms = new TweenParms().Prop("SampleFloat", 27.5f).Ease(EaseType.Linear).Loops(-1, LoopType.Yoyo);
+        TweenParms tweenParms = new TweenParms().Prop("SampleFloat", 27.5f)
+            .Ease(EaseType.Linear)
+            .Loops(-1, LoopType.Yoyo);
         HOTween.To(this, 3, tweenParms);
 
         // SEQUENCE CREATION
@@ -74,12 +80,14 @@ public class HOTweenDemoBrain : MonoBehaviour
         sequence.Append(HOTween.To(CubeTrans3, 1, new TweenParms().Prop("rotation", new Vector3(0, 360, 0))));
         // "Insert" lets you insert a tween where you want
         // (in this case we're having it start at half the sequence and last until the end)
-        sequence.Insert(sequence.duration * 0.5f, HOTween.To(CubeTrans3.GetComponent<Renderer>().material, sequence.duration * 0.5f, new TweenParms().Prop("color", colorTo)));
+        sequence.Insert(sequence.duration*0.5f,
+            HOTween.To(CubeTrans3.GetComponent<Renderer>().material, sequence.duration*0.5f,
+                new TweenParms().Prop("color", colorTo)));
         // Start the sequence animation
         sequence.Play();
     }
 
-    void OnGUI()
+    private void OnGUI()
     {
         // Here we show the sample string and float being tweened
         GUILayout.Label("String tween: " + SampleString);
@@ -89,7 +97,7 @@ public class HOTweenDemoBrain : MonoBehaviour
     // ===================================================================================
     // METHODS ---------------------------------------------------------------------------
 
-    void Cube2StepComplete()
+    private void Cube2StepComplete()
     {
         Debug.Log("HOTween: Cube 2 Step Complete");
     }
