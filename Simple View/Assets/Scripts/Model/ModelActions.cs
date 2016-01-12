@@ -85,7 +85,6 @@ public class ModelActions : MonoBehaviour
 
         foreach (var childPos in initialChildPositions)
         {
-            //childPos.Key.DOMove(transform.TransformPoint(childPos.Value), explosionTime);
             childPos.Key.DOLocalMove(childPos.Value, explosionTime);
         }
 
@@ -101,7 +100,6 @@ public class ModelActions : MonoBehaviour
 
         foreach (var childPos in initialChildPositions)
         {
-            //childPos.Key.DOMove(childPos.Value + transform.TransformPoint(childPos.Value * explosionOffsetFactor), explosionTime);
             childPos.Key.DOLocalMove(childPos.Value + childPos.Value * explosionOffsetFactor, explosionTime);
         }
 
