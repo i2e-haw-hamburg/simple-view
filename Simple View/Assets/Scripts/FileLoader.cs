@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Model;
+using Assets.Scripts.Utilities;
 using BasicLoader;
 using CADLoader;
 using UnityEngine;
@@ -46,10 +47,16 @@ namespace Assets.Scripts
                 });
             var dataLoader = LoaderFactory.CreateFileLoader(_text.text);
             var type = CADTypeUtils.FromFileExtension(_text.text);
+            DefaultLogger.Instance.Info("Use type: " + type);
             var cadModel = loader.Load(type, dataLoader);
+            dataLoader.Close();
+            DefaultLogger.Instance.Info("cad model loaded");
             var parts = cadModel.Parts;
+            DefaultLogger.Instance.Info("Cad model contains " + parts.Count + " parts");
             var baseObject = Builder.Create("Model");
+            DefaultLogger.Instance.Info("Create base object");
             baseObject.transform.parent = cfgModelManager.transform;
+            DefaultLogger.Instance.Info("Set model manager as parent");
             foreach (var part in parts)
             {
                 var go = Builder.Create(part.Name, "defaultMat");
@@ -59,6 +66,8 @@ namespace Assets.Scripts
                 go.transform.parent = baseObject.transform;
                 go.transform.localPosition = Builder.ToUnity(part.Position);
             }
+
+            DefaultLogger.Instance.Info("Update position");
 
             if (cfgSpawnedObject_EnablePhysics)
             {
@@ -83,11 +92,13 @@ namespace Assets.Scripts
                 }
 
                 baseObjectRigidbody.constraints = constraints;
+                DefaultLogger.Instance.Info("Physics enabled");
             }
 
             baseObject.AddComponent<ModelActions>();
 
-            dataLoader.Close();
+            DefaultLogger.Instance.Info("Add model actions component");
+
         }
     }
 }

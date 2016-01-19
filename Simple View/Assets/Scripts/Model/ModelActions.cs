@@ -9,7 +9,7 @@ public class ModelActions : MonoBehaviour
 
     private float explosionTime = 1.0f;
 
-    private float explosionOffsetFactor = 3.0f;
+    private float explosionOffsetFactor = 6.0f;
 
     private bool exploded = false;
 
@@ -74,6 +74,21 @@ public class ModelActions : MonoBehaviour
     public void RotateTo(Quaternion newRotation)
     {
         this.transform.rotation = newRotation;
+    }
+
+    public void RotateBy(Vector3 deltaRotation)
+    {
+        this.transform.rotation = Quaternion.Euler(deltaRotation + this.transform.rotation.eulerAngles);
+    }
+
+    public void RotateBy(Quaternion deltaRotation)
+    {
+        this.transform.rotation = transform.rotation * deltaRotation;
+    }
+
+    public void ScaleTo(Vector3 newScale)
+    {
+        this.transform.localScale = newScale;
     }
 
     public void Implode()
