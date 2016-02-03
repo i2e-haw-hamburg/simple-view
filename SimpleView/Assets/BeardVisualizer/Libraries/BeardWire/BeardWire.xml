@@ -1,0 +1,1167 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BeardWire</name>
+    </assembly>
+    <members>
+        <member name="T:BeardWire.Implementation.SocketExtensions">
+            <summary>
+                Source: http://stackoverflow.com/questions/722240/instantly-detect-client-disconnection-from-server-socket
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.TCPConnection.Connected">
+            <summary>
+                Detemines if this connection is still active.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.TCPConnection.DataAvailable">
+            <summary>
+                Determines if there are new messages available from remotes that need processing.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.TCPConnection.LocalAddress">
+            <summary>
+                The local address of this connection.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.TCPConnection.LocalEndPoint">
+            <summary>
+                The local endpoint of this connection.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.TCPConnection.LocalPort">
+            <summary>
+                The local port this connection is using.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.TCPConnection.RemoteAddress">
+            <summary>
+                The address of the remote this connection is connecting to.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.TCPConnection.RemoteEndPoint">
+            <summary>
+                The endpoint of the remote this connection connects to.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.TCPConnection.RemotePort">
+            <summary>
+                The port of the remote is using for this connection.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Implementation.TCPConnection.Close">
+            <summary>
+                Closes the connection to the remote.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Implementation.TCPConnection.ReadByteArray(System.Net.IPEndPoint@)">
+            <summary>
+                Reads a byte array sent by the remote. If there is no data available this method will block until there is.
+            </summary>
+            <param name="sender">
+                The remote that sent the byte-array.
+            </param>
+            <returns>
+                The byte array that was sent by the remote to us.
+            </returns>
+        </member>
+        <member name="M:BeardWire.Implementation.TCPConnection.SendByteArray(System.Byte[])">
+            <summary>
+                Sends a byte array to the remote this connection is connecting to.
+            </summary>
+            <param name="message">
+                The byte-array that will be sent to the remote.
+            </param>
+        </member>
+        <member name="P:BeardWire.Implementation.UDPListeningPort.DataAvailable">
+            <summary>
+                Determines if there are new messages available from remotes that need processing.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.UDPListeningPort.LocalAddress">
+            <summary>
+                The IP address used by this listening port.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.UDPListeningPort.LocalEndpoint">
+            <summary>
+                The endpoint this listener is using.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.UDPListeningPort.LocalPort">
+            <summary>
+                The local port this connection is using.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Implementation.UDPListeningPort.Close">
+            <summary>
+                Stops listening for UDP datagrams on this port <see cref="P:BeardWire.Implementation.UDPListeningPort.LocalPort" />.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Implementation.UDPListeningPort.ReadByteArray(System.Net.IPEndPoint@)">
+            <summary>
+                Reads a message sent from another remote via UDP.
+            </summary>
+            <param name="sender">
+                The remote that sent the byte-array.
+            </param>
+            <returns>
+                The message that was sent by the remote.
+            </returns>
+        </member>
+        <member name="F:BeardWire.Implementation.NetworkAdapterConfig.CriticalNumberOfQueuedJobs">
+            <summary>
+                If there are more messages queued for sending or deserialization than this amount, a warning will be logged.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.NetworkAdapterConfig.ConnectionTimeout">
+            <summary>
+                The default connection timeout in ms.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.NetworkAdapterConfig.Loopback">
+            <summary>
+                The loopback address that is used by the network adapter.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.NetworkAdapterConfig.TCPKeepAliveIntervall">
+            <summary>
+                The intervall in milliseconds a TCP connection will check if it is connected.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.NetworkAdapterConfig.UseCompression">
+            <summary>
+                Determines if the middleware will use GZip compression to compress network messages.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.NetworkAdapterConfig.UsedAddressFamily">
+            <summary>
+                The address family this network adapter uses for its connections.
+            </summary>
+        </member>
+        <member name="T:BeardWire.Implementation.UseCases.ResponseMessageHandling">
+            <summary>
+                Manages remotes that are waiting for a response message and local listeners that are waiting for a response.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.ResponseMessageHandling.GetResponseMessageListenerEndpointForTransactionID(System.Guid)">
+            <summary>
+                Gets the endpoint of the listener that is waiting for a response message with the specified transaction ID.
+            </summary>
+            <param name="transactionID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.ResponseMessageHandling.NotifyListenersAboutNewResponseMessage``1(``0,System.Net.IPEndPoint,System.Net.IPEndPoint,System.Guid)">
+            <summary>
+                Notifies all interested listeners about a response message with the specified transaction ID. Listeners that get
+                notified will be unsubscribed automatically.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="message"></param>
+            <param name="senderAddress"></param>
+            <param name="senderPort"></param>
+            <param name="responseMessageTransactionID"></param>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.ResponseMessageHandling.RegisterRemoteThatNeedsAResponseMessage(System.Guid,System.Net.IPAddress,System.Int32)">
+            <summary>
+                Registers a new remote that is waiting for a response message with the specified transaction ID.
+            </summary>
+            <param name="requestMessageTransactionID"></param>
+            <param name="senderAddress"></param>
+            <param name="senderPort"></param>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.ResponseMessageHandling.SubscribeForResponseMessageOfTypeWithID``1(System.Guid,BeardWire.Interface.MessageListenerDelegate{``0},System.Int32,System.Action)">
+            <summary>
+                Subscribes for messages with the specified transaction ID. As soon as a message with the specified ID arrives the
+                listener will be unsubscribed automatically.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="messageTransactionID"></param>
+            <param name="listener"></param>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.ResponseMessageHandling.UnRegisterRemoteThatNeedsAResponseMessage(System.Guid)">
+            <summary>
+                Unregisters a remote that is waiting for a response message.
+            </summary>
+            <param name="requestMessageTransactionID"></param>
+        </member>
+        <member name="T:BeardWire.Implementation.UseCases.MessageTypeIdentification">
+            <summary>
+                Provides functionality for mapping IDs to message types and vice versa.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageTypeIdentification.GetIDForMessageType(System.Type)">
+            <summary>
+                Gets the ID that has been mapped to the specified type of message.
+            </summary>
+            <param name="typeOfMessage">
+            </param>
+            <returns>
+                The <see cref="T:System.Int32" />.
+            </returns>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageTypeIdentification.GetTypeForID(System.Int32)">
+            <summary>
+                Gets the type of message that was mapped to the specified id.
+            </summary>
+            <param name="id">
+            </param>
+            <returns>
+                The <see cref="T:System.Type" />.
+            </returns>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageTypeIdentification.RegisterMessageType(System.Type,System.Int32)">
+            <summary>
+                Maps a specified message type to a specified ID.
+            </summary>
+            <param name="messageType">
+            </param>
+            <param name="messageTypeID">
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageTypeIdentification.UnRegisterMessageType(System.Type)">
+            <summary>
+                Unregisters a previously registered message type <see cref="M:BeardWire.Implementation.UseCases.MessageTypeIdentification.RegisterMessageType(System.Type,System.Int32)" />.
+            </summary>
+            <param name="messageType">
+                The type of message that will be unregistered.
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageTypeIdentification.UnRegisterMessageType(System.Int32)">
+            <summary>
+                Unregisters a previously registered message type <see cref="M:BeardWire.Implementation.UseCases.MessageTypeIdentification.RegisterMessageType(System.Type,System.Int32)" />.
+            </summary>
+            <param name="messageTypeID">
+                The ID of the message type that will be unregistered.
+            </param>
+        </member>
+        <member name="T:BeardWire.Implementation.UseCases.MessageSerialization">
+            <summary>
+                Provides functionality for serializing and deserializing messages with Protobuf.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageSerialization.DeserializeMessage``1(System.Byte[])">
+            <summary>
+                Deserializes a Protobuf message from a byte-array.
+            </summary>
+            <typeparam name="T">
+                The Type of the message.
+            </typeparam>
+            <param name="message">
+                The serialized message.
+            </param>
+            <returns>
+                The deserialized message.
+            </returns>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageSerialization.DeserializeMessage``1(System.Byte[],``0)">
+            <summary>
+                Deserializes a Protobuf message from a byte-array. This method uses a recycled message of type T.
+            </summary>
+            <typeparam name="T">
+                The Type of the message.
+            </typeparam>
+            <param name="message">
+                The serialized message.
+            </param>
+            <param name="reusableMessageInstance">
+                A message instance of type T that has been reset for reuse.
+            </param>
+            <returns>
+                The deserialized message.
+            </returns>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageSerialization.DeserializeMessage(System.Byte[],System.Type)">
+            <summary>
+                Deserializes a Protobuf message from a byte-array.
+                This is a non generic version to avoid reflection, if a generic parameter isn't easily available.
+            </summary>
+            <param name="message">
+                The serialized message.
+            </param>
+            <param name="typeOfMessage">
+                The Type of the message.
+            </param>
+            <returns>
+                The deserialized message. In contrast to the generic version of this method, you will need to cast it to the
+                correct type.
+            </returns>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageSerialization.SerializeMessage``1(``0)">
+            <summary>
+                Serializes a message to a byte-array using Protobuf.
+            </summary>
+            <typeparam name="T">
+            </typeparam>
+            <param name="message">
+            </param>
+            <returns>
+                The <see cref="!:byte[]" />.
+            </returns>
+        </member>
+        <member name="T:BeardWire.Implementation.UseCases.MessageSubscription">
+            <summary>
+                Provides functionality for notifying registered listeners about the arrival of all types of network messages.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageSubscription.ClearListeners">
+            <summary>
+                Removes all registered listeners of all messages.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageSubscription.ClearPendingMessagesToDeliver">
+            <summary>
+                All messages that are still pending to be delivered will be cleared.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageSubscription.NotifyListenersOfMessageType(System.Object,System.Net.IPEndPoint,System.Net.IPEndPoint,System.Guid)">
+            <summary>
+                Notifies all listeners that are waiting for the specified message type of a new message.
+            </summary>
+            <param name="message">
+                The message that has arrived.
+            </param>
+            <param name="senderEndpoint">
+                The remote that sent the message.
+            </param>
+            <param name="transactionId">
+                The transaction id with which the message was sent.
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageSubscription.RegisterListenerOfMessageType``1(BeardWire.Interface.MessageListenerDelegate{``0})">
+            <summary>
+                Registers a listener Delegate to be notified if a specific type of message arrives.
+            </summary>
+            <typeparam name="T">
+                The Type of the message the listener wants to be notified about.
+            </typeparam>
+            <param name="listener">
+                The Delegate that will be registered.
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageSubscription.RegisterListenerOfMessageType``1(BeardWire.Interface.MessageListenerDelegate{``0},BeardWire.Interface.MessageDeliveryOptions.MessageDeliveryOption{``0})">
+            <summary>
+                Registers a listener Delegate to be notified if a specific type of message arrives.
+            </summary>
+            <typeparam name="T">
+                The Type of the message the listener wants to be notified about.
+            </typeparam>
+            <param name="listener">
+                The Delegate that will be registered.
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.UseCases.MessageSubscription.UnRegisterListenerForMessageType``1(BeardWire.Interface.MessageListenerDelegate{``0})">
+            <summary>
+                Unregisters a Delegate that was previously registered using <see cref="M:BeardWire.Implementation.UseCases.MessageSubscription.RegisterListenerOfMessageType``1(BeardWire.Interface.MessageListenerDelegate{``0})" />.
+            </summary>
+            <typeparam name="T">
+                The Type of the message the listener wants to be notified about.
+            </typeparam>
+            <param name="listener">
+                The Delegate that will be unregistered.
+            </param>
+        </member>
+        <member name="F:BeardWire.Implementation.NetworkAdapter.cachedLocalAddressForSendingMessages">
+            <summary>
+                Getting the local address is costly. This optimization is only used when sending messsages to determine, if the
+                message is going to localhost.
+            </summary>
+        </member>
+        <member name="T:BeardWire.Implementation.SocketAdapter">
+            <summary>
+                Provides functionality for sending and receiving byte arrays over the network using TCP and UDP.
+                There are no precautions in place to circumvent the unreliability of the UDP protocol. If you need a reliable way
+                to send byte-arrays, use TCP.
+            </summary>
+        </member>
+        <member name="F:BeardWire.Implementation.SocketAdapter.openTcpConnections">
+            <summary>
+                All TCP connections that are currently maintained by this SocketAdapter.
+            </summary>
+        </member>
+        <member name="F:BeardWire.Implementation.SocketAdapter.openTCPPorts">
+            <summary>
+                All TCP ports this adapter currently accepts connections on.
+            </summary>
+        </member>
+        <member name="F:BeardWire.Implementation.SocketAdapter.openUdpListeningPorts">
+            <summary>
+                All UDP ports this adapter is currently listening at.
+            </summary>
+        </member>
+        <member name="F:BeardWire.Implementation.SocketAdapter.udpSendClient">
+            <summary>
+                The UDP client that is used for sending datagrams to other UDP sockets.
+            </summary>
+        </member>
+        <member name="F:BeardWire.Implementation.SocketAdapter.listeningForMessages">
+            <summary>
+                Determines if the adapter is currently listening for messages on TCP and/or UDP.
+            </summary>
+        </member>
+        <member name="F:BeardWire.Implementation.SocketAdapter.MessageListenerThread">
+            <summary>
+                The main Thread that handles the listening for messages on TCP and/or UDP.
+            </summary>
+        </member>
+        <member name="T:BeardWire.Implementation.SocketAdapter.ByteArrayReceivedListener">
+            <summary>
+                A listener for byte arrays that are received over the network.
+            </summary>
+            <param name="receivedByteArray"> The byte array that was received from the remote. </param>
+            <param name="senderAddress"> The IP of the remote that sent the message. </param>
+            <param name="senderPort"> The port on which the message was sent by the remote. </param>
+            <param name="localPort"> The local port the byte array was received on. </param>
+        </member>
+        <member name="E:BeardWire.Implementation.SocketAdapter.ByteArrayReceived">
+            <summary>
+                Fires whenever a new byte-array is received.
+                Byte arrays can only be received on ports this SocketAdapter is listening on. To start listening for messages on a
+                specific port use <see cref="M:BeardWire.Implementation.SocketAdapter.ListenForUDPMessagesOnPort(System.Int32)" />.
+                This event will be called from threads, the listeners therefore need to be thread safe!
+            </summary>
+        </member>
+        <member name="E:BeardWire.Implementation.SocketAdapter.TCPConnectionClosed">
+            <summary>
+                Is fired if a TCP connection is closed for whatever reason.
+            </summary>
+        </member>
+        <member name="E:BeardWire.Implementation.SocketAdapter.TCPConnectionEstablished">
+            <summary>
+                Is fired if a new TCP connection is established.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.SocketAdapter.EstablishedTcpConnections">
+            <summary>
+                Gets all remotes that a TCP connection has been established to.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.SocketAdapter.OpenTCPListeningPorts">
+            <summary>
+                Gets all ports on which the adapter accepts TCP connections.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.SocketAdapter.OpenUDPListeningPorts">
+            <summary>
+                All ports on which the adapter accepts UDP datagrams.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Implementation.SocketAdapter.UDPSendPort">
+            <summary>
+                The port on which UDP datagrams are sent. The port will be choosen automatically dependent on which port is free.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.ConnectToTCPHost(System.Net.IPAddress,System.Int32)">
+            <summary>
+                Establishes a TCP connection to a remote host.
+            </summary>
+            <param name="address">
+                The IP address of the remote host.
+            </param>
+            <param name="port">
+                The port of the remote host.
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.DisconnectFromTcpHost(System.Net.IPAddress,System.Int32)">
+            <summary>
+                Closes a previously established connection (<see cref="M:BeardWire.Implementation.SocketAdapter.ConnectToTCPHost(System.Net.IPAddress,System.Int32)" />) to a remote host.
+            </summary>
+            <param name="address">
+                The IPAddress of the remote host.
+            </param>
+            <param name="port">
+                The port of the remote host.
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.GetConnectionToTcpRemote(System.Net.IPAddress,System.Int32)">
+            <summary>
+                Gets the TCP connection object that represents the connection to the specified remote or null, if there is no
+                connection to the host.
+            </summary>
+            <param name="address"></param>
+            <param name="port"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.GetLocalAddress">
+            <summary>
+                Gets the IPAddress of this host.
+            </summary>
+            <returns>
+                The <see cref="T:System.Net.IPAddress" />.
+            </returns>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.IsConnectedToTcpRemote(System.Net.IPAddress,System.Int32)">
+            <summary>
+                Determines if there is an open TCP connection to the specified Endpoint.
+            </summary>
+            <param name="address">
+            </param>
+            <param name="port">
+            </param>
+            <returns>
+                The <see cref="T:System.Boolean" />.
+            </returns>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.IsListeningForTCPMessagesOnPort(System.Int32)">
+            <summary>
+                Determines if this adapter is listening for TCP messages on a specific port.
+            </summary>
+            <param name="port">
+            </param>
+            <returns>
+                True if the adapter is listening on the specified port, otherwise false.
+            </returns>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.IsListeningForUDPMessagesOnPort(System.Int32)">
+            <summary>
+                Determines if this adapter is listening for UDP messages on a specific port.
+            </summary>
+            <param name="port">
+            </param>
+            <returns>
+                True if the adapter is listening on the specified port, otherwise false.
+            </returns>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.ListenForTCPMessagesOnPort(System.Int32)">
+            <summary>
+                Starts to listen for messages on a specified port that were sent using using the TCP protocol. The messages can be
+                retrieved with <see cref="E:BeardWire.Implementation.SocketAdapter.ByteArrayReceived" />.
+            </summary>
+            <param name="port">
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.ListenForUDPMessagesOnPort(System.Int32)">
+            <summary>
+                Starts to listen for messages on a specified port that were sent using using the UDP protocol. The messages can be
+                retrieved with <see cref="E:BeardWire.Implementation.SocketAdapter.ByteArrayReceived" />.
+            </summary>
+            <param name="port">
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.SendByteArrayOverTCP(System.Byte[],System.Net.IPAddress,System.Int32)">
+            <summary>
+                Send a byte array to the specified, remote using the TCP protocol. Before sending messages a connection needs to be
+                established by using <see cref="M:BeardWire.Implementation.SocketAdapter.ConnectToTCPHost(System.Net.IPAddress,System.Int32)" />.
+            </summary>
+            <param name="message">
+            </param>
+            <param name="address">
+            </param>
+            <param name="port">
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.SendByteArrayOverUDP(System.Byte[],System.Net.IPAddress,System.Int32)">
+            <summary>
+                Send a byte array to the specified remote, using the UDP protocol. No connection is required to send messages. Only
+                messages up to 65527 bytes are supported.
+            </summary>
+            <param name="message">
+                The message that is sent to the remote.
+            </param>
+            <param name="address">
+                The IP adress of the remote.
+            </param>
+            <param name="port">
+                The port of the remote, where it is listening to UDP messages.
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.Shutdown">
+            <summary>
+                Closes all open connections and listening ports.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.StopListeningForTCPMessagesOnPort(System.Int32)">
+            <summary>
+                Stops listening for messages on the specified port and closes all open connections.
+            </summary>
+            <param name="port">
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.StopListeningForUDPMessagesOnPort(System.Int32)">
+            <summary>
+                Stops listening for messages on the specified port.
+            </summary>
+            <param name="port">
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.CloseTCPConnection(System.Net.IPAddress,System.Int32,System.Boolean,System.Exception)">
+            <summary>
+                Closes the TCP connection to the specified remote.
+            </summary>
+            <param name="address"> The address of the remote the connection will be closed to. </param>
+            <param name="port"> The port of the remote the connection will be closed to. </param>
+            <param name="gracefulShutdown">
+                True if the connection was closed gracefully, otherwise false. This parameter should
+                for example be false if a timeout occured.
+            </param>
+            <param name="connectionException">
+                If the connection shutdown was not graceful, this parameter should contain the
+                connection that caused the connection abort.
+            </param>
+        </member>
+        <member name="M:BeardWire.Implementation.SocketAdapter.NetworkChangeOnNetworkAddressChanged(System.Object,System.EventArgs)">
+            <summary>
+                Updates the local IP addresses if they change.
+            </summary>
+            <param name="sender"></param>
+            <param name="eventArgs"></param>
+        </member>
+        <member name="T:BeardWire.Interface.EstablishedTCPConnection">
+            <summary>
+                A connection that has been established with a remote over TCP.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Interface.EstablishedTCPConnection.Encrypted">
+            <summary>
+                True if this connection is encrypted, otherwise false.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Interface.EstablishedTCPConnection.LocalEndPoint">
+            <summary>
+                The local endpoint of this connection.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Interface.EstablishedTCPConnection.RemoteEndPoint">
+            <summary>
+                The remote endpoint of this connection.
+            </summary>
+        </member>
+        <member name="T:BeardWire.Interface.Exceptions.AlreadyConnectedException">
+            <summary>
+                The already connected exception.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Interface.Exceptions.AlreadyConnectedException.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:BeardWire.Interface.Exceptions.AlreadyConnectedException" /> class.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Interface.Exceptions.AlreadyConnectedException.#ctor(System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BeardWire.Interface.Exceptions.AlreadyConnectedException" /> class.
+            </summary>
+            <param name="message">
+                The message.
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.Exceptions.AlreadyConnectedException.#ctor(System.String,System.Exception)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BeardWire.Interface.Exceptions.AlreadyConnectedException" /> class.
+            </summary>
+            <param name="message">
+                The message.
+            </param>
+            <param name="innerException">
+                The inner exception.
+            </param>
+        </member>
+        <member name="T:BeardWire.Interface.Exceptions.NotConnectedException">
+            <summary>
+                The not connected exception.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Interface.Exceptions.NotConnectedException.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:BeardWire.Interface.Exceptions.NotConnectedException" /> class.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Interface.Exceptions.NotConnectedException.#ctor(System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BeardWire.Interface.Exceptions.NotConnectedException" /> class.
+            </summary>
+            <param name="message">
+                The message.
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.Exceptions.NotConnectedException.#ctor(System.String,System.Exception)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BeardWire.Interface.Exceptions.NotConnectedException" /> class.
+            </summary>
+            <param name="message">
+                The message.
+            </param>
+            <param name="innerException">
+                The inner exception.
+            </param>
+        </member>
+        <member name="T:BeardWire.Interface.Exceptions.NotListeningOnPortException">
+            <summary>
+                The not listening on port exception.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Interface.Exceptions.NotListeningOnPortException.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:BeardWire.Interface.Exceptions.NotListeningOnPortException" /> class.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Interface.Exceptions.NotListeningOnPortException.#ctor(System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BeardWire.Interface.Exceptions.NotListeningOnPortException" /> class.
+            </summary>
+            <param name="message">
+                The message.
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.Exceptions.NotListeningOnPortException.#ctor(System.String,System.Exception)">
+            <summary>
+                Initializes a new instance of the <see cref="T:BeardWire.Interface.Exceptions.NotListeningOnPortException" /> class.
+            </summary>
+            <param name="message">
+                The message.
+            </param>
+            <param name="innerException">
+                The inner exception.
+            </param>
+        </member>
+        <member name="T:BeardWire.Interface.MessageDeliveryOptions.MessageDeliveryOption`1">
+            <summary>
+                Specifies options for the delivery of messages to listeners.
+            </summary>
+        </member>
+        <member name="T:BeardWire.Interface.MessageDeliveryOptions.MessageDeliveryOptionAllMessages`1">
+            <summary>
+                All messages will be delivered. This is the default behaviour.
+            </summary>
+        </member>
+        <member name="T:BeardWire.Interface.MessageDeliveryOptions.MessageDeliveryOptionOnlyLatestInTimeInterval`1">
+            <summary>
+                Only the latest received messages will be delivered.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Interface.MessageDeliveryOptions.MessageDeliveryOptionOnlyLatestInTimeInterval`1.MaximumNumberOfMessagesPerSecond">
+            <summary>
+                The maximum number of messages that will be delivered in a second.
+            </summary>
+        </member>
+        <member name="T:BeardWire.Interface.MessageListenerDelegate`1">
+            <summary>
+                Listener for messages from remotes.
+            </summary>
+            <typeparam name="T"> The type of message that has arrived. </typeparam>
+            <param name="message"> The deserialized message instance. </param>
+            <param name="senderAddress"> The IP-address of the sender. </param>
+            <param name="senderPort"> The port the sender used to send the message. </param>
+            <param name="localPort"> The port the message was received on. </param>
+            <param name="transactionId">
+                The transaction id of the message. Transactions are used to identify responses to previous
+                messages. This will default to an empty Guid. Messages that have been sent by using
+                <see cref="M:BeardWire.Interface.INetworkAdapter.SendMessageOverTCPThatRequiresAnAnswer``2(``0,System.Net.IPAddress,System.Int32,BeardWire.Interface.MessageListenerDelegate{``1})" /> will have a unique Guid. Responses to
+                messages can be sent by using <see cref="!:INetworkAdapter.SendResponseMessage&lt;T&gt;" />.
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.NetworkAdapterFactory.GetNewNetworkAdapter">
+            <summary>
+                Gets a new network adapter with no logging.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BeardWire.Interface.NetworkAdapterFactory.GetNewNetworkAdapter(BeardLogger.Interface.ILogger)">
+            <summary>
+                Gets a new network adapter with the specified logger.
+            </summary>
+            <param name="logger"> The logger that will be used by the network adapter. </param>
+            <returns></returns>
+        </member>
+        <member name="M:BeardWire.Interface.NetworkAdapterFactory.GetNewNetworkAdapter(System.String,BeardLogger.Interface.ILogger,System.Collections.Generic.List{System.Reflection.Assembly})">
+            <summary>
+                Gets a new network adapter instance where all messages contained in the specified config file are already
+                registered.
+            </summary>
+            <param name="configFilePath">The path to the config file that contains the message names and identifiers.</param>
+            <param name="logger">The logger that will be used in the network adapter.</param>
+            <param name="usedAssemblies">The assemblies that will be searched for the message types from the config file. Defaults to null, which means that all reachable assemblies will be searched. However, this can result in wrong types, if there is a message with the same name in two or more assemblies. In this case it is not guaranteed which message will be taken.</param>
+            <returns> A preconfigured new network adapter instace. </returns>
+        </member>
+        <member name="M:BeardWire.Interface.NetworkAdapterFactory.GetNewNetworkAdapter(System.String,System.Collections.Generic.List{System.Reflection.Assembly})">
+            <summary>
+                Gets a new network adapter instance where all messages contained in the specified config file are already
+                registered.
+            </summary>
+            <param name="configFilePath">The path to the config file that contains the message names and identifiers.</param>
+            <returns> A preconfigured new network adapter instace. </returns>
+        </member>
+        <member name="M:BeardWire.Interface.NetworkAdapterFactory.GetNewUnityNetworkAdapter">
+            <summary>
+                Gets a new network adapter instance for use in Unity. The new instance will be treated as the new current network
+                adapter instance that is returned when <see cref="M:BeardWire.Interface.NetworkAdapterFactory.GetUnityNetworkAdapterInstance" />,
+                <see cref="!:GetUnityNetworkAdapterInstance(TextAsset)" /> and <see cref="!:GetUnityNetworkAdapterInstance(string)" />
+                are called. The old instance of the network adapter will remain unchanged.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BeardWire.Interface.NetworkAdapterFactory.GetNewUnityNetworkAdapter(BeardLogger.Interface.ILogger)">
+            <summary>
+                Gets a new network adapter instance for use in Unity. The new instance will be treated as the new current network
+                adapter instance that is returned when <see cref="M:BeardWire.Interface.NetworkAdapterFactory.GetUnityNetworkAdapterInstance" />,
+                <see cref="!:GetUnityNetworkAdapterInstance(TextAsset)" /> and <see cref="!:GetUnityNetworkAdapterInstance(string)" />
+                are called. The old instance of the network adapter will remain unchanged.
+            </summary>
+            <param name="logger"> The logger that will be used by the new Unity network adapter. </param>
+            <returns></returns>
+        </member>
+        <member name="M:BeardWire.Interface.NetworkAdapterFactory.GetNewUnityNetworkAdapter(UnityEngine.TextAsset,System.Collections.Generic.List{System.Reflection.Assembly})">
+            <summary>
+                Gets a new network adapter instance, for use in Unity, where all messages contained in the specified config file
+                are already registered. The new instance will be treated as the new current network adapter instance that is
+                returned when <see cref="M:BeardWire.Interface.NetworkAdapterFactory.GetUnityNetworkAdapterInstance" />,
+                <see cref="!:GetUnityNetworkAdapterInstance(TextAsset)" /> and <see cref="!:GetUnityNetworkAdapterInstance(string)" />
+                are called. The old instance of the network adapter will remain unchanged.
+            </summary>
+            <param name="configFile">The config file that contains the message names and identifiers.</param>
+            <returns> A preconfigured network adapter instace. </returns>
+        </member>
+        <member name="M:BeardWire.Interface.NetworkAdapterFactory.GetNewUnityNetworkAdapter(BeardLogger.Interface.ILogger,UnityEngine.TextAsset,System.Collections.Generic.List{System.Reflection.Assembly})">
+            <summary>
+                Gets a new network adapter instance, for use in Unity, where all messages contained in the specified config file
+                are already registered. The new instance will be treated as the new current network adapter instance that is
+                returned when <see cref="M:BeardWire.Interface.NetworkAdapterFactory.GetUnityNetworkAdapterInstance" />,
+                <see cref="!:GetUnityNetworkAdapterInstance(TextAsset)" /> and <see cref="!:GetUnityNetworkAdapterInstance(string)" />
+                are called. The old instance of the network adapter will remain unchanged.
+            </summary>
+            <param name="logger"></param>
+            <param name="configFile">The config file that contains the message names and identifiers.</param>
+            <returns> A preconfigured network adapter instace. </returns>
+        </member>
+        <member name="M:BeardWire.Interface.NetworkAdapterFactory.GetUnityNetworkAdapterInstance">
+            <summary>
+                Gets the current network adapter instance for use in Unity.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BeardWire.Interface.NetworkAdapterFactory.GetUnityNetworkAdapterInstance(System.String,System.Collections.Generic.List{System.Reflection.Assembly})">
+            <summary>
+                Gets the current network adapter instance, for use in Unity, where all messages contained in the specified config
+                file
+                are already registered.
+                BE ADVISED: The current instance will be completely reset! All connections will be closed, all listening ports
+                closed, all listeners unsubscribed and all registered messages deregistered!
+            </summary>
+            <param name="configFilePath">The path to the config file that contains the message names and identifiers.</param>
+            <returns> A preconfigured network adapter instace. </returns>
+        </member>
+        <member name="M:BeardWire.Interface.NetworkAdapterFactory.GetUnityNetworkAdapterInstance(UnityEngine.TextAsset,System.Collections.Generic.List{System.Reflection.Assembly})">
+            <summary>
+                Gets the current network adapter instance, for use in Unity, where all messages contained in the specified config
+                file
+                are already registered.
+                BE ADVISED: The current instance will be completely reset! All connections will be closed, all listening ports
+                closed, all listeners unsubscribed and all registered messages deregistered!
+            </summary>
+            <param name="configFile">The config file that contains the message names and identifiers.</param>
+            <returns> A preconfigured network adapter instace. </returns>
+        </member>
+        <member name="P:BeardWire.Interface.TCPConnectionClosedEventArgs.ConnectionException">
+            <summary>
+                If the connection was not closed gracefully (the <see cref="P:BeardWire.Interface.TCPConnectionClosedEventArgs.ConnectionShutdownGraceful" /> is set to false) the
+                Exception that caused the connection abort is stored here. Otherwise it will be null.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Interface.TCPConnectionClosedEventArgs.ConnectionShutdownGraceful">
+            <summary>
+                True if the connection was closed gracefully, otherwise false.
+            </summary>
+        </member>
+        <member name="T:BeardWire.Interface.INetworkAdapter">
+            <summary>
+                Provides functionality for sending and receiving messages over the network.
+            </summary>
+        </member>
+        <member name="E:BeardWire.Interface.INetworkAdapter.TCPConnectionClosed">
+            <summary>
+                Is fired if a TCP connection is closed for whatever reason.
+            </summary>
+        </member>
+        <member name="E:BeardWire.Interface.INetworkAdapter.TCPConnectionEstablished">
+            <summary>
+                Is fired if a new TCP connection is established.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Interface.INetworkAdapter.EstablishedTcpConnections">
+            <summary>
+                Gets all remotes that a TCP connection has been established.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Interface.INetworkAdapter.LocalAddress">
+            <summary>
+                The IP address of this remote.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Interface.INetworkAdapter.OpenTCPListeningPorts">
+            <summary>
+                Gets all ports on which the adapter accepts TCP connections.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Interface.INetworkAdapter.OpenUDPListeningPorts">
+            <summary>
+                All ports on which the adapter accepts UDP datagrams.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Interface.INetworkAdapter.RegisteredMessageTypes">
+            <summary>
+                All types of messages that this network adapters has knowledge of.
+                The keys are the ids of the messages where the values are the types of the messages.
+            </summary>
+        </member>
+        <member name="P:BeardWire.Interface.INetworkAdapter.UDPDatagramSendPort">
+            <summary>
+                The port on which UDP datagrams are sent. The port will be choosen automatically dependent on which port is free.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.ConnectToTCPRemote(System.Net.IPAddress,System.Int32)">
+            <summary>
+                Establishes a TCP connection to a remote host.
+            </summary>
+            <param name="remoteAddress"> The address of the remote to which the connection will be established to. </param>
+            <param name="remotePort"> The port of the remote to which the connection will be established to. </param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.ConnectToTCPRemote(System.Net.IPEndPoint)">
+            <summary>
+                Establishes a TCP connection to a remote host.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.ConnectToTCPRemoteWithEncryption(System.Net.IPAddress,System.Int32)">
+            <summary>
+                Establishes a TCP connection to a remote host. The connection will use a public key encryption.
+            </summary>
+            <param name="remoteAddress"> The address of the remote to which the encrypted connection will be established to. </param>
+            <param name="remotePort"> The port of the remote to which the encrypted connection will be established to. </param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.ConnectToTCPRemoteWithEncryption(System.Net.IPEndPoint)">
+            <summary>
+                Establishes a TCP connection to a remote host. The connection will use a public key encryption.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.DisconnectFromTCPRemote(System.Net.IPEndPoint)">
+            <summary>
+                Disconnects from a remote host.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.DisconnectFromTCPRemote(System.Net.IPAddress,System.Int32)">
+            <summary>
+                Disconnects from a remote host.
+            </summary>
+            <param name="remoteAddress">
+            </param>
+            <param name="remotePort">
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.IsAddressLocalHost(System.Net.IPAddress)">
+            <summary>
+                Checks if the supplied address is equal to localhost.
+            </summary>
+            <param name="address"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.RegisterMessageType(System.Int32,System.Type)">
+            <summary>
+                Maps a specified message type to a specified ID.
+            </summary>
+            <param name="messageTypeID"></param>
+            <param name="messageType"></param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.RegisterMessageType``1(System.Int32)">
+            <summary>
+                Maps a specified message type to a specified ID.
+            </summary>
+            <param name="messageTypeID">
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.Reset">
+            <summary>
+                Shuts all connections down and clears all registered messages.
+            </summary>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.SendMessageOverTCP(System.Object,System.Net.IPAddress,System.Int32)">
+            <summary>
+                Sends a message to a specified recipient.
+            </summary>
+            <param name="message">
+                The message that will be sent.
+            </param>
+            <param name="recipientAddress">
+                The address of the recipient.
+            </param>
+            <param name="port">
+                The port.
+            </param>
+            <exception cref="T:BeardWire.Interface.Exceptions.FailedToSendMessageException">
+                The most common cause is that the adapter is not connected to the specified remote. This might happen,
+                because a connection was not established in the first place, or the connection was closed.
+                The exception may also have other reasons. Check the inner exception for more details.
+            </exception>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.SendMessageOverTCPThatRequiresAnAnswer``2(``0,System.Net.IPAddress,System.Int32,BeardWire.Interface.MessageListenerDelegate{``1})">
+            <summary>
+                Sends a message to a specified recipient that requires an answer from the receipient. The answer will be handled by
+                using a unique transcation ID. If the remote sends an answer before the default timeout runs out, the provided
+                listener delegate will be
+                called. If the answer arrives after the timeout, it will not be delivered.
+            </summary>
+            <param name="message">
+                The message that will be sent.
+            </param>
+            <param name="recipientAddress">
+                The IP address of the recipient.
+            </param>
+            <param name="port">
+                The port the receipient is connected on.
+            </param>
+            <param name="responseMessageListener">
+                The listener that will be called when a response to the specified message arrives.
+            </param>
+            <exception cref="T:BeardWire.Interface.Exceptions.FailedToSendMessageException">
+                The most common cause is that the adapter is not connected to the specified remote. This might happen,
+                because a connection was not established in the first place, or the connection was closed.
+                The exception may also have other reasons. Check the inner exception for more details.
+            </exception>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.SendMessageOverTCPThatRequiresAnAnswer``2(``0,System.Net.IPAddress,System.Int32,BeardWire.Interface.MessageListenerDelegate{``1},System.Int32,System.Action)">
+            <summary>
+                Sends a message to a specified recipient that requires an answer from the receipient. The answer will be handled by
+                using a unique transcation ID.  If the remote sends an answer before the specified timeout runs out, the provided
+                listener delegate will be
+                called. If the answer arrives after the timeout, it will not be delivered. As soon as the timeout runs out, the
+                specified timeout listener will be called.
+            </summary>
+            <param name="message">
+                The message that will be sent.
+            </param>
+            <param name="recipientAddress">
+                The IP address of the recipient.
+            </param>
+            <param name="port">
+                The port the receipient is connected on.
+            </param>
+            <param name="responseMessageListener">
+                The listener that will be called when a response to the specified message arrives.
+            </param>
+            <param name="timeout">
+                The time in which a response messsage is accepted.
+            </param>
+            <param name="timeoutListener">
+                The listener that will be called, if no answer arrives within the specified timeout.
+            </param>
+            <exception cref="T:BeardWire.Interface.Exceptions.FailedToSendMessageException">
+                The most common cause is that the adapter is not connected to the specified remote. This might happen,
+                because a connection was not established in the first place, or the connection was closed.
+                The exception may also have other reasons. Check the inner exception for more details.
+            </exception>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.SendMessageOverUDP``1(``0,System.Net.IPAddress,System.Int32)">
+            <summary>
+                Sends a message to a specified recipient.
+            </summary>
+            <param name="message">
+                The message that will be sent.
+            </param>
+            <param name="recipientAddress">
+                The address of the recipient.
+            </param>
+            <param name="port">
+                The port.
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.SendResponseMessageOverTCP``1(``0,System.Guid)">
+            <summary>
+                Sends a response to a request with the specified transaction ID to the remote that is waiting for it. See
+                <see cref="M:BeardWire.Interface.INetworkAdapter.SendMessageOverTCPThatRequiresAnAnswer``2(``0,System.Net.IPAddress,System.Int32,BeardWire.Interface.MessageListenerDelegate{``1})" /> for more details.
+            </summary>
+            <param name="message">
+                The message that will be sent.
+            </param>
+            <param name="transactionID">The unique ID of the transaction the message is part of.</param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.Shutdown">
+            <summary>
+                Stops listening for messages on all ports and shuts down all open TCP connections.
+            </summary>
+        </member>
+        <!-- Ungültiger XML-Kommentar wurde für den Member "M:BeardWire.Interface.INetworkAdapter.StartAcceptingConnectionsOnTCPPort(System.Int32)" ignoriert -->
+        <member name="M:BeardWire.Interface.INetworkAdapter.StartListeningForMessagesOnTCPPort(System.Int32)">
+            <summary>
+                Start accepting TCP connections and messages on the specified port.
+            </summary>
+            <param name="port">
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.StartListeningForMessagesOnUDPPort(System.Int32)">
+            <summary>
+                Start accepting UDP datagrams on the specified port.
+            </summary>
+            <param name="port"></param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.StopAcceptingConnectionsOnTCPPort(System.Int32)">
+            <summary>
+                Stop accepting TCP connections and messages on the specified port.
+            </summary>
+            <param name="port">
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.StopListeningForMessagesOnTCPPort(System.Int32)">
+            <summary>
+                Stop accepting TCP connections and messages on the specified port.
+            </summary>
+            <param name="port">
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.StopListeningForMessagesOnUDPPort(System.Int32)">
+            <summary>
+                Stop accepting datagrams on the specified port.
+            </summary>
+            <param name="port"></param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.SubscribeToMessagesOfType``1(BeardWire.Interface.MessageListenerDelegate{``0})">
+            <summary>
+                The specified Delegate will be called whenever a new message of the specified type arrives.
+            </summary>
+            <typeparam name="T">
+                The type of message the Delegate will be subscribed to.
+            </typeparam>
+            <param name="messageListener">
+                The delegate that will be called, when a message of the specified type arrives.
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.SubscribeToMessagesOfType``1(BeardWire.Interface.MessageDeliveryOptions.MessageDeliveryOption{``0})">
+            <summary>
+                The specified Delegate will be called whenever a new message of the specified type arrives.
+            </summary>
+            <typeparam name="T">
+                The type of message the Delegate will be subscribed to.
+            </typeparam>
+            <param name="messageListener">
+                The delegate that will be called, when a message of the specified type arrives.
+            </param>
+            <param name="messageDeliveryOption">
+                Additional options for the message delivery to the listener.
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.UnRegisterMessageType(System.Type)">
+            <summary>
+                Unregisters a previously registered message type <see cref="M:BeardWire.Interface.INetworkAdapter.RegisterMessageType(System.Int32,System.Type)" />.
+            </summary>
+            <param name="messageType">
+                The type of message that will be unregistered.
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.UnRegisterMessageType(System.Int32)">
+            <summary>
+                Unregisters a previously registered message type <see cref="M:BeardWire.Interface.INetworkAdapter.RegisterMessageType(System.Int32,System.Type)" />.
+            </summary>
+            <param name="messageTypeID">
+                The ID of the message type that will be unregistered.
+            </param>
+        </member>
+        <member name="M:BeardWire.Interface.INetworkAdapter.UnsubscribeFromMessagesOfType``1(BeardWire.Interface.MessageListenerDelegate{``0})">
+            <summary>
+                Unsubscribes the specified delegate from the specified messages.
+            </summary>
+            <typeparam name="T">
+                The type of message the Delegate will be unsubscribed from.
+            </typeparam>
+            <param name="messageListener">
+                The Delegate that will be unsubscribed. The Delegate will therefore no longer be called,
+                if a message of the specified type arrives.
+            </param>
+        </member>
+    </members>
+</doc>
