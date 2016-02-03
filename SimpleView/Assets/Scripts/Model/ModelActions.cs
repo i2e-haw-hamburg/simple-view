@@ -1,10 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using BeardWire.Interface;
 using DG.Tweening;
+using NetworkMessages.GestureRecognition.UserCommands;
 
 public class ModelActions : MonoBehaviour
 {
+    [SerializeField]
+    private float cfgScaleMin = 0.1f;
+
+    [SerializeField]
+    private float cfgScaleMax = 3.0f;
+
     private float rotationSpeed = 60.0f;
 
     private float explosionTime = 1.0f;
@@ -28,14 +38,31 @@ public class ModelActions : MonoBehaviour
             initialChildPositions.Add(child, child.transform.localPosition);
         }
 
+        NetworkAdapterFactory.GetUnityNetworkAdapterInstance().SubscribeToMessagesOfType<ScaleAndRotate>(OnScaleAndRotateMessage);
+        NetworkAdapterFactory.GetUnityNetworkAdapterInstance().SubscribeToMessagesOfType<Explode>(OnExplodeMessage);
+        NetworkAdapterFactory.GetUnityNetworkAdapterInstance().SubscribeToMessagesOfType<Implode>(OnImplodeMessage);
+        NetworkAdapterFactory.GetUnityNetworkAdapterInstance().SubscribeToMessagesOfType<Samurai>(OnSamuraiMessage);
+    }
 
-        //while (true)
-        //{
-        //    yield return new WaitForSeconds(1.5f);
-        //    this.Explode();
-        //    yield return new WaitForSeconds(1.5f);
-        //    this.Implode();
-        //}
+    private void OnSamuraiMessage(Samurai message, IPEndPoint remoteendpoint, IPEndPoint localendpoint, Guid transactionid)
+    {
+        Debug.Log("The Samurai isn't ready yet. But soon he will be...");
+    }
+
+    private void OnImplodeMessage(Implode message, IPEndPoint remoteendpoint, IPEndPoint localendpoint, Guid transactionid)
+    {
+        this.Implode();
+    }
+
+    private void OnExplodeMessage(Explode message, IPEndPoint remoteendpoint, IPEndPoint localendpoint, Guid transactionid)
+    {
+        this.Explode();
+    }
+
+    private void OnScaleAndRotateMessage(ScaleAndRotate message, IPEndPoint remoteEndPoint, IPEndPoint localEndPoint, Guid transactionId)
+    {
+        this.RotateBy(new Vector3(message.x_rotation, message.y_rotation, message.z_rotation));
+        this.ScaleTo(new Vector3(message.x_scale, message.y_scale, message.z_scale));
     }
 
     private void Update()
@@ -88,6 +115,10 @@ public class ModelActions : MonoBehaviour
 
     public void ScaleTo(Vector3 newScale)
     {
+        newScale.x = Mathf.Clamp(newScale.x, this.cfgScaleMin, this.cfgScaleMax);
+        newScale.y = Mathf.Clamp(newScale.y, this.cfgScaleMin, this.cfgScaleMax);
+        newScale.z = Mathf.Clamp(newScale.z, this.cfgScaleMin, this.cfgScaleMax);
+
         this.transform.localScale = newScale;
     }
 
