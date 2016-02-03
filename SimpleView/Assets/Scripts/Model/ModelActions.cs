@@ -25,10 +25,14 @@ public class ModelActions : MonoBehaviour
 
     private Dictionary<Transform, Vector3> initialChildPositions = new Dictionary<Transform, Vector3>();
 
+    [SerializeField]
     private KeyCode RotateLeftKey = KeyCode.LeftArrow;
+    [SerializeField]
     private KeyCode RotateRightKey = KeyCode.RightArrow;
-    
+
+    [SerializeField]
     private KeyCode ExplodeToggleKey = KeyCode.E;
+    [SerializeField]
     private KeyCode ImplodeKey = KeyCode.I;
 
     private void Start()
@@ -38,10 +42,28 @@ public class ModelActions : MonoBehaviour
             initialChildPositions.Add(child, child.transform.localPosition);
         }
 
+        RegisterNetworkMessageListeners();
+    }
+
+    private void OnDestroy()
+    {
+        UnregisterNetworkMessageListeners();
+    }
+
+    private void RegisterNetworkMessageListeners()
+    {
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance().SubscribeToMessagesOfType<ScaleAndRotate>(OnScaleAndRotateMessage);
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance().SubscribeToMessagesOfType<Explode>(OnExplodeMessage);
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance().SubscribeToMessagesOfType<Implode>(OnImplodeMessage);
         NetworkAdapterFactory.GetUnityNetworkAdapterInstance().SubscribeToMessagesOfType<Samurai>(OnSamuraiMessage);
+    }
+
+    private void UnregisterNetworkMessageListeners()
+    {
+        NetworkAdapterFactory.GetUnityNetworkAdapterInstance().UnsubscribeFromMessagesOfType<ScaleAndRotate>(OnScaleAndRotateMessage);
+        NetworkAdapterFactory.GetUnityNetworkAdapterInstance().UnsubscribeFromMessagesOfType<Explode>(OnExplodeMessage);
+        NetworkAdapterFactory.GetUnityNetworkAdapterInstance().UnsubscribeFromMessagesOfType<Implode>(OnImplodeMessage);
+        NetworkAdapterFactory.GetUnityNetworkAdapterInstance().UnsubscribeFromMessagesOfType<Samurai>(OnSamuraiMessage);
     }
 
     private void OnSamuraiMessage(Samurai message, IPEndPoint remoteendpoint, IPEndPoint localendpoint, Guid transactionid)
