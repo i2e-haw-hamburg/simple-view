@@ -49,10 +49,18 @@ public class GestureRecognitionAdapter : UnitySingleton<GestureRecognitionAdapte
     /// <param name="port"></param>
     public void ConnectToGestureRecognition(IPAddress ip, int port)
     {
+        if (ip == null)
+        {
+            throw new ArgumentNullException("ip");
+        }
+
+        this.gestureRecognitionIP = ip;
+        this.gestureRecognitionPort = port;
+        
         try
         {
             NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
-                .ConnectToTCPRemote(gestureRecognitionIP, gestureRecognitionPort);
+                .ConnectToTCPRemote(ip, port);
 
             NetworkAdapterFactory.GetUnityNetworkAdapterInstance()
                 .SendMessageOverTCP(

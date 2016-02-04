@@ -83,6 +83,8 @@ public class ModelActions : MonoBehaviour
 
     private void OnScaleAndRotateMessage(ScaleAndRotate message, IPEndPoint remoteEndPoint, IPEndPoint localEndPoint, Guid transactionId)
     {
+        Debug.Log(string.Format("Got Scale and rotate message: ({0},{1},{2})", message.x_rotation, message.y_rotation, message.z_rotation));
+
         this.RotateBy(new Vector3(message.x_rotation, message.y_rotation, message.z_rotation));
         this.ScaleTo(new Vector3(message.x_scale, message.y_scale, message.z_scale));
     }
