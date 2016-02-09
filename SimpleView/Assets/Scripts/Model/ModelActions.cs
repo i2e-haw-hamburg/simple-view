@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using Assets.Scripts.Utilities;
 using BeardWire.Interface;
 using DG.Tweening;
 using NetworkMessages.GestureRecognition.UserCommands;
@@ -83,10 +84,15 @@ public class ModelActions : MonoBehaviour
 
     private void OnScaleAndRotateMessage(ScaleAndRotate message, IPEndPoint remoteEndPoint, IPEndPoint localEndPoint, Guid transactionId)
     {
-        Debug.Log(string.Format("Got Scale and rotate message: ({0},{1},{2})", message.x_rotation, message.y_rotation, message.z_rotation));
+        DefaultLogger.Instance.Error(string.Format("Got Scale and rotate message: ({0},{1},{2},{3})", message.x_rotation, message.y_rotation, message.z_rotation, message.x_scale));
 
         this.RotateBy(new Vector3(message.x_rotation, message.y_rotation, message.z_rotation));
-        this.ScaleTo(new Vector3(message.x_scale, message.y_scale, message.z_scale));
+        this.ScaleBy(new Vector3(message.x_scale, message.y_scale, message.z_scale));
+    }
+
+    private void ScaleBy(Vector3 newScale)
+    {
+        this.transform.localScale = this.transform.localScale * newScale.x;
     }
 
     private void Update()

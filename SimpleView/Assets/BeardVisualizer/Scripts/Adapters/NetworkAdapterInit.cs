@@ -14,10 +14,16 @@ using System;
 using BeardWire.Interface;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
 using Assets.Scripts.Utilities;
+using Debug = UnityEngine.Debug;
 
 public class NetworkAdapterInit : UnitySingleton<NetworkAdapterInit>
 {
+    private Stopwatch stopwatch;
+
     private bool networkAdapterRunning;
 
     public event Action OnShutdown;
@@ -30,7 +36,8 @@ public class NetworkAdapterInit : UnitySingleton<NetworkAdapterInit>
         base.Initialize();
 
         networkAdapterRunning = true;
-        NetworkAdapterFactory.GetNewUnityNetworkAdapter(DefaultLogger.Instance, this.cfgNetworkMessageConfigFile);
+        
+        NetworkAdapterFactory.GetNewUnityNetworkAdapter(DefaultLogger.Instance, this.cfgNetworkMessageConfigFile, new List<Assembly> { Assembly.GetExecutingAssembly() } );
     }
 
     private void ShutdownNetworkAdapter()
